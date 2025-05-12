@@ -18,7 +18,7 @@ Please cite this paper when the provided code is used.
 
 #### Scripts
 - ``DataPrep.m`` pipeline for respiratory phase extraction, surrogate generation using IAAFT, and binning of behavioral data into respiratory phase bins
-- ``ExampleCircPerm.m`` demo script for circular permutation test on example empirical and simulated data, generated linear and polar plots of the results
+- ``ExampleCircPerm.m`` demo script for circular permutation test on example empirical and simulated data, generates linear and polar plots of the results
 
 \*\*add example linear & polar plots here\*\*
 
