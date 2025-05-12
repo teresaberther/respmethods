@@ -28,5 +28,4 @@ Teresa Berther, Elio Balestrieri, Daniel S. Kluger & Martina Saltafossi, Institu
 Contact: teresa.berther@uni-muenster.de
 
 ## Disclaimer:
----
 The code in this repository was implemented with care and tested on both empirical and simulated data. Nevertheless, it may contain errors or bugs, which may affect the outcome of your analysis. We do not take responsibility for any harm coming from using the provided code, neither caused by errors in the code nor by its improper application. Please email us any bugs you find.
