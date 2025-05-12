@@ -1,15 +1,12 @@
 # respmethods - Robust statistics for respiration-brain coupling
----
 Robust pipeline for respiration phase-locked analyses of neural or behavioral data across the frequency spectrum, including a circular cluster permutation procedure reliably controlling error rates for multiple comparisons while accounting for the wrap-around continuity of circular data.
 
 ## Reference:
----
 [ref]
 
 Please cite this paper when the provided code is used.
 
 ## Contents:
----
 #### Functions
 - ``CircClust`` cluster circular data points using complex representations in the polar plane
 - ``CircPerm`` permutation test clusters in circular data
@@ -26,7 +23,6 @@ Please cite this paper when the provided code is used.
 \*\*add example linear & polar plots here\*\*
 
 ## Authors:
----
 Teresa Berther, Elio Balestrieri, Daniel S. Kluger & Martina Saltafossi, Institute for Biomagnetism and Biosignal Analysis, University of Münster, Germany
 
 Contact: teresa.berther@uni-muenster.de
