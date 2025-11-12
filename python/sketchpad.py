@@ -54,7 +54,7 @@ if QUICKTEST:
 
 # create surrogates
 
-NPERM = 100
+NPERM = 1000
 indat = detrend(binhr)
 
 perm_mat = IAAFT(indat, NPERM)
