@@ -35,7 +35,7 @@ for k = 1:numel(peaks)-1
     tmp = phasevec(peaks(k)+1:troughs(k));              % phase angles between peak #1  and trough #1
     tmp2 = phasevec(troughs(k)+1:peaks(k+1));           % phase angles between trough #1 and peak #2
     sub = linspace(0+pi/numel(tmp),pi,numel(tmp));      % linear interpolation peak2trough
-    sub2 = linspace(-pi+pi/numel(tmp),0,numel(tmp2));   % same for trough2peak
+    sub2 = linspace(-pi+pi/numel(tmp2),0,numel(tmp2));  % same for trough2peak
     phasevec(peaks(k)+1:troughs(k)) = sub;              % substitute with phase angles (peak2trough)
     phasevec(troughs(k)+1:peaks(k+1)) = sub2;           % same for trough2peak
 end
