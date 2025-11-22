@@ -21,7 +21,7 @@ function surrogateData = generate_surrogate_iaaft(originalData, varargin)
 %			all messages are printed on the command line. If
 %			false, only critical errors are displayed.
 %
-%	NSE Laboratory, Dept. of Physics, University of Trento
+%	(c) A. Perinelli & L. Ricci, NSE Laboratory, Dept. of Physics, University of Trento
 %
 %	REFERENCE:
 %	The IAAFT (Iterative Amplitude-Adjusted Fourier Transform) algorithm
@@ -122,5 +122,6 @@ function surrogateData = generate_surrogate_iaaft(originalData, varargin)
 			convergence = false;
 		end
 	end
+
 
 end
