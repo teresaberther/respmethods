@@ -12,6 +12,7 @@ Please cite this paper when the provided code is used.
 - ``CircPerm`` permutation test clusters in circular data
 - ``two_point_interp``extract phase of an oscillatory time series using the two-point interpolation method
 <<<<<<< HEAD
+<<<<<<< HEAD
 - ``four_point_interp``extract phase of an oscillatory time series using the four-point interpolation method
 - ``protohase_interp`` extract phase of an oscillatory time series using the protophase interpolation method, adapted from the [DAMOCO toolbox](http://www.stat.physik.uni-potsdam.de/~mros/damoco.html) (C) Björn Kralemann, Michael Rosenblum, Arkady Pikovsky, University of Potsdam 
 ##### Required, included functions 
@@ -22,6 +23,13 @@ Please cite this paper when the provided code is used.
 - ``generate_surrogate_iaaft``generates a phase-independent surrogate of a time series using the Iterative Amplitude-Adjusted Fourier Transform, (C) NSE Laboratory, Department of Physics, University of Trento
 - ``PLV``computes the phase-locking value between two signals, (C) Edden Gerber, Edmond and Lily Safra Center for Brain Sciences, Hebrew University of Jerusalem, Israel
 >>>>>>> f562c5e (add example plots to readme)
+=======
+- ``four_point_interp``extract phase of an oscillatory time series using the four-point interpolation method
+- ``protohase_interp`` extract phase of an oscillatory time series using the protophase interpolation method, adapted from the [DAMOCO toolbox](http://www.stat.physik.uni-potsdam.de/~mros/damoco.html) (C) Björn Kralemann, Michael Rosenblum, Arkady Pikovsky, University of Potsdam 
+##### Required, included functions 
+- ``generate_surrogate_iaaft``generates a phase-independent surrogate of a time series using the Iterative Amplitude-Adjusted Fourier Transform, (C) Alessio Perinelli & Leonardo Ricci, NSE Laboratory, Department of Physics, University of Trento ([github](https://github.com/LeonardoRicci/iaaft))
+- ``PLV``computes the phase-locking value between two signals, (C) Edden Gerber, Edmond and Lily Safra Center for Brain Sciences, Hebrew University of Jerusalem, Israel ([github](https://github.com/edden-gerber/time_series_analysis_and_statistics))
+>>>>>>> 4bf100e (include new interpolation in README.md)
 
 #### Scripts
 - ``DataPrep.m`` pipeline for respiratory phase extraction, surrogate generation using IAAFT, and binning of behavioral data into respiratory phase bins
