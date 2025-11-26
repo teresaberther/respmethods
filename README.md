@@ -2,7 +2,7 @@
 Robust pipeline for respiration phase-locked analyses of neural or behavioral data across the frequency spectrum, including a circular cluster permutation procedure reliably controlling error rates for multiple comparisons while accounting for the wrap-around continuity of circular data.
 
 ## Reference:
-[ref]
+Berther, T., Balestrieri, E., Saltafossi, M., Paulsen, L. B., Andersen, L. M., Kluger, D. S. (2025). Robust circular cluster-based statistics for respiration-brain coupling. _PsyArXiv_, 2025-11.
 
 Please cite this paper when the provided code is used.
 
