@@ -78,7 +78,7 @@ end
 surrogatedist = nan(nperms, 1); % store maximum clustering statistics from each permutation
 for iperm = 1:nperms
     
-    % standardize the permuted data by computing the z-score
+    % select current permutation
     thisperm = PERMEMPdat(:, iperm);
     
     % cluster the permuted data
@@ -92,7 +92,7 @@ for iperm = 1:nperms
         [~, maxabs_idx] = max(abs(all_cluststats));
         surr_val = all_cluststats(maxabs_idx);
     else
-        % in case there are no valid clusters, use the max absolute z-score
+        % in case there are no valid clusters, use the max absolute value
         [~, maxabs_idx] = max(abs(thisperm));
         surr_val = thisperm(maxabs_idx);
     end
