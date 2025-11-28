@@ -6,3 +6,6 @@
 *.so
 *.o
 *.egg-info
+
+# MATLAB data
+*.mat
