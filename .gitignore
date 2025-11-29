@@ -9,3 +9,6 @@
 
 # MATLAB data
 *.mat
+
+# Python data
+*.npy
