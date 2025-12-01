@@ -10,8 +10,8 @@
 % Input:
 %   - raw respiration time series vector
 %   - events structure with stimulus onset and outcome field for each subject
-%     .onset: contains timestamp of stimulus presentation for each trial
-%     .outcome: contains outcome value for each trial (here: hit vs miss) 
+%     .onset: contains timestamp of stimulus presentation for each trial (in samples from start of recording)
+%     .outcome: contains outcome value for each trial (here: hit vs miss)
 %
 % Output (here: hit rate):
 %   binhr.mat   = mean empirical outcome for each respiratory phase bin, for each subject
@@ -88,11 +88,12 @@ for isub = 1:numel(ids)
     end
     save(fullfile(outpath, ['surrogates_iaaft_' num2str(isub) '.mat']),'allsresp', '-v7.3');
 
-    % get stimulus onsets in the respiration time frame 
+    % get stimulus onsets in the respiration time frame
     % (= time from recording start in ms)
     disp(['Computing empirical and surrogate onsets for subject #' num2str(isub) '/' num2str(length(ids))]);
-    
-    onsets = events{isub}.onsets;                                           % the onsets field contains the time stamps for the stimuli presentation
+
+    onsets = events{isub}.onsets;                                           % the onsets field contains the sample time stamps for the stimuli presentation
+    onsets = round(onsets/(orgfs/fs));                                      % downsample the sample time stamps to match new fs
     empphase = pv(onsets);                                                  % empirical phase at onset of stimulus for each trial
     surrphases = [];
     for k = 1:niter
