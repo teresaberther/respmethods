@@ -6,7 +6,7 @@ Set of Helpers functins
 
 import numpy as np
 
-def PLV(theta1, theta2):
+def plv(theta1, theta2):
     """
     The function computes the instantaneous phase of two signals and returns the
     Phase Locking Value (PLV) between the two as:

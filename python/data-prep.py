@@ -10,9 +10,9 @@ from scipy.signal import decimate
 from multiprocessing import Pool
 
 # custom
-from respymethods.GenerateSurrogates import IAAFT
+from respymethods.GenerateSurrogates import iaaft
 from respymethods.PhaseExtraction import two_point_interp
-from respymethods.Helpers import PLV, prune_nan
+from respymethods.Helpers import plv, prune_nan
 
 
 def load_data(fname):
@@ -43,12 +43,12 @@ def parallel_process(dict_in):
     i=0;
     while i<n_iter_process:
         
-        surr_ = IAAFT(x_norm)
+        surr_ = iaaft(x_norm)
         theta_ = two_point_interp(surr_)
         tmp1, tmp2 = prune_nan(phase_vect, theta_)
-        plv = PLV(tmp1, tmp2)
+        this_plv = plv(tmp1, tmp2)
         
-        if plv<crit_plv:
+        if this_plv<crit_plv:
             surr_data[:, i] = surr_
             i+=1         
     
@@ -65,7 +65,7 @@ def optimize_cpu_dist(n_iter, maxusage=.75):
 
     mod = n_iter%n_cpus_avail    
     while mod:
-        n_cpus_avail=-1
+        n_cpus_avail -= 1
         mod = n_iter%n_cpus_avail
 
     return int(n_cpus_avail)

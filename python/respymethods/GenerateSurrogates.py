@@ -7,7 +7,7 @@ Generate surrogate data
 import numpy as np
 from pyfftw.interfaces.scipy_fft import rfft, irfft
 
-def IAAFT(indat, maxiter=int(1e5), convthreshold=1e-6):
+def iaaft(indat, maxiter=int(1e5), convthreshold=1e-6):
     """
     The function generates, via Iterative Amplitude Adjusted Fourier Transform 
     (IAFFT) 1 surrogatewith the same spectral characteristics of the original 
