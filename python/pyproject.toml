@@ -1,5 +1,8 @@
-[project]
+[build-system]
+requires = ["setuptools>=74.1", "numpy"]
+build-backend = "setuptools.build_meta"
 
+[project]
 name = "respymethods"
 version = "0.1.0"
 description = "Robust pipeline for respiration phase-locked analyses of neural or behavioral data across the frequency spectrum"
@@ -9,10 +12,14 @@ dependencies = [
 	"numpy",
 	"scipy",
 	"pyfftw",
-	"setuptools",
 	"matplotlib",
 ]
 authors = [
 	{name = "Elio Balestrieri", email = "ebalestr@uni-muenster.de"},
 	{name = "Teresa Berther", email = "teresa.berther@uni-muenster.de"},
+]
+
+[tool.setuptools]
+ext-modules = [
+	{name = "respymethods.PhaseExtraction", sources = ['src/respymethods/clib/phase-extraction.c'], include-dirs = ["src/respymethods/clib/"], py-limited-api = true}
 ]
