@@ -20,7 +20,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 You can create a virtual environment calling `uv sync` from the respymethods folder in the repository: 
 
 ```bash
-cd python/respymethods
+cd python
 uv sync
 ```
 And activate it with:
@@ -29,11 +29,4 @@ And activate it with:
 source .venv/bin/activate
 ```
 
-### Build the PhaseExtraction module
-
-Needed for two_point_interp.
-
-```bash
-python setup.py build_ext --inplace
-```
 
