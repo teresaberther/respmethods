@@ -11,7 +11,6 @@ dependencies = [
 	"pyfftw",
 	"setuptools",
 	"matplotlib",
-	"multiprocessing",
 ]
 authors = [
 	{name = "Elio Balestrieri", email = "ebalestr@uni-muenster.de"},
