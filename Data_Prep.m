@@ -10,13 +10,8 @@
 % Input:
 %   - raw respiration time series vector
 %   - events structure with stimulus onset and outcome field for each subject
-<<<<<<< HEAD
 %     .onset: contains timestamp of stimulus presentation for each trial (in samples from start of recording)
 %     .outcome: contains outcome value for each trial (here: hit vs miss)
-=======
-%     .onset: contains timestamp of stimulus presentation for each trial
-%     .outcome: contains outcome value for each trial (here: hit vs miss) 
->>>>>>> 6f41e6c (add example DataPrep script)
 %
 % Output (here: hit rate):
 %   binhr.mat   = mean empirical outcome for each respiratory phase bin, for each subject
@@ -93,20 +88,12 @@ for isub = 1:numel(ids)
     end
     save(fullfile(outpath, ['surrogates_iaaft_' num2str(isub) '.mat']),'allsresp', '-v7.3');
 
-<<<<<<< HEAD
     % get stimulus onsets in the respiration time frame
     % (= time from recording start in ms)
     disp(['Computing empirical and surrogate onsets for subject #' num2str(isub) '/' num2str(length(ids))]);
 
     onsets = events{isub}.onsets;                                           % the onsets field contains the sample time stamps for the stimuli presentation
     onsets = round(onsets/(orgfs/fs));                                      % downsample the sample time stamps to match new fs
-=======
-    % get stimulus onsets in the respiration time frame 
-    % (= time from recording start in ms)
-    disp(['Computing empirical and surrogate onsets for subject #' num2str(isub) '/' num2str(length(ids))]);
-    
-    onsets = events{isub}.onsets;                                           % the onsets field contains the time stamps for the stimuli presentation
->>>>>>> 6f41e6c (add example DataPrep script)
     empphase = pv(onsets);                                                  % empirical phase at onset of stimulus for each trial
     surrphases = [];
     for k = 1:niter
@@ -118,6 +105,7 @@ for isub = 1:numel(ids)
     save(fullfile(outpath, ['surrogatephases_' num2str(isub) '.mat']),'surrphases');
 
 end
+
 
 %% Compute outcome (hit rates) ~ respiration phase
 % example outcome here is hit rate, but can be any outcome variable
