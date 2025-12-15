@@ -1,0 +1,19 @@
+[project]
+
+name = "respymethods"
+version = "0.1.0"
+description = "Robust pipeline for respiration phase-locked analyses of neural or behavioral data across the frequency spectrum"
+requires-python = ">= 3.13"
+readme = "WIKI.md"
+dependencies = [
+	"numpy",
+	"scipy",
+	"pyfftw",
+	"setuptools",
+	"matplotlib",
+	"multiprocessing",
+]
+authors = [
+	{name = "Elio Balestrieri", email = "ebalestr@uni-muenster.de"},
+	{name = "Teresa Berther", email = "teresa.berther@uni-muenster.de"},
+]
