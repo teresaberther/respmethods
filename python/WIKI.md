@@ -29,5 +29,7 @@ And activate it with:
 source .venv/bin/activate
 ```
 
+## How to use respymethods
 
+Check out `Tutorial_CircClust.py` and `Tutorial_CircPermMultiprocessing.py`.
 
