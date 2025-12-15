@@ -17,10 +17,10 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ### Create the environment
 
-You can create a virtual environment calling `uv sync` from the respymethods folder in the repository: 
+You can create a local installation of respymethods in a virtual environment calling `uv sync` from the parent repo folder: 
 
 ```bash
-cd python
+cd respmethods/python
 uv sync
 ```
 And activate it with:
@@ -28,5 +28,6 @@ And activate it with:
 ```bash
 source .venv/bin/activate
 ```
+
 
 
