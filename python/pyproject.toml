@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools>=74.1", "numpy"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build >= 0.9.17 , < 0.10.0"]
+build-backend = "uv_build"
 
 [project]
-name = "respymethods"
+name = "respy"
 version = "0.1.0"
-description = "Robust pipeline for respiration phase-locked analyses of neural or behavioral data across the frequency spectrum"
+description = "Robust pipeline for respiration phase-locked analyses of neural or behavioral data including a cluster permutation test for circular data. "
 requires-python = ">= 3.13"
 readme = "WIKI.md"
 dependencies = [
