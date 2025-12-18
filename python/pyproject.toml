@@ -3,11 +3,10 @@ requires = ["uv_build >= 0.9.17 , < 0.10.0"]
 build-backend = "uv_build"
 
 [project]
-name = "respy"
+name = "respymethods"
 version = "0.1.0"
 description = "Robust pipeline for respiration phase-locked analyses of neural or behavioral data including a cluster permutation test for circular data. "
 requires-python = ">= 3.13"
-readme = "WIKI.md"
 dependencies = [
 	"numpy",
 	"scipy",
