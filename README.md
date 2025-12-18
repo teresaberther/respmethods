@@ -31,7 +31,7 @@ No special installation required, just add the 'matlab' folder in this repositor
 
 ### Example plots for results of circular cluster permutation test on randomly simulated data:
 
-![results plot for simulated data, linear and polar representations](simcluster_results_matlabfig.png)
+![results plot for simulated data, linear and polar representations](simcluster_results_matlab.png)
 
 # Python package - respymethods
 ### Disclaimer
