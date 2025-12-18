@@ -95,7 +95,7 @@ uv pip install -e .
 Detailed documentation of all included functions to be added soon.
 
 ### Scripts
-- ``Tutorial_DataPrepMutliprocessing.py`` demo pipeline for parallelized, fast respiratory phase extraction, surrogate generation using IAAFT, and binning of behavioral data into respiratory phase bins
+- ``Tutorial_DataPrepMultiprocessing.py`` demo pipeline for parallelized, fast respiratory phase extraction and surrogate generation using IAAFT
 - ``Tutorial_DataClust.py`` demo script for circular permutation test on example empirical and simulated data, generates linear and polar plots of the results
 
 
