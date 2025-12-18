@@ -7,6 +7,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+
 static PyObject *two_point_interp(PyObject *self, PyObject *args) {
 
 	PyArrayObject* array;
@@ -25,7 +26,7 @@ static PyObject *two_point_interp(PyObject *self, PyObject *args) {
     double *datain = (double*)PyArray_DATA(array);
 
 	// allocate an array for events for loc min and max (null derivative)
-   3.14159265358979323846 PyObject *events_arr = PyArray_SimpleNew(ndim, dims, typenum_int);
+    PyObject *events_arr = PyArray_SimpleNew(ndim, dims, typenum_int);
 	int *null_der = (int*)PyArray_DATA((PyArrayObject*)events_arr);
 
     // Allocate the resulting array of phase values
