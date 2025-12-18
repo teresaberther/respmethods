@@ -31,23 +31,38 @@ No special installation required, just add the 'matlab' folder in this repositor
 
 ### Example plots for results of circular cluster permutation test on randomly simulated data:
 
-![results plot for simulated data, linear and polar representations](simcluster_results.png)
+![results plot for simulated data, linear and polar representations](simcluster_results_matlabfig.png)
 
 # Python package - respymethods
 ### Disclaimer
-This package is still under active development and only available in a beta version, thus also does not yet have a Python Package Index. Installation has so far only been tested on Unix systems (Linux + MacOS), install on a Windows system at your own risk.
+This package is still under active development and only available in a beta version, thus also does not yet have a Python Package Index. The code is not documented fully yet and partly experimental, download at your own risk.
 
 ### Install
-#### 1. Install uv
-Installation requires the package manager uv - a fast and efficient python package and project manager. Please refer to the [documentation](https://docs.astral.sh/uv/) for more details.
-On Unix systems (Linux + MacOS), the installer can be downloaded with `curl` and executed with `sh`:
+#### 1. Requirements
+The build of the package requires a C compiler, which may not necessarily be natively included in your OS. We recommend:
+- Linux: `gcc`, install as recommended in the [gcc documentation](https://gcc.gnu.org/install/)
+- MacOS: `clang`,  shipped with the [XCode Developer Tools](https://developer.apple.com/documentation/safari-developer-tools/installing-xcode-and-simulators)
+- Windows:  `Visual C++`, download [here](https://visualstudio.microsoft.com/)
+
+
+Additionally, the installation depends on the package manager uv - a fast and efficient python package and project manager. Please refer to the [documentation](https://docs.astral.sh/uv/) for more details.
+On **Unix** systems (Linux + MacOS), the installer can be downloaded with `curl` and executed with `sh`:
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-#### 2. Virtual environment
-In line with best practices on python project management, we highly recommend creating your local installation of respymethods in a virtual environment. From the parent repository folder (or the location where you usually stash your venvs), create a uv virtual environment:
+On **Windows**, use `irm` to download the executable script for `uv` and execute it with `iex` in a `PowerShell` prompt:
+
+```bash
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+#### 2. Package installation
+Respymethods will receive a Python Package Index in the future for easy installation using `pip`. The beta-dev version can be installed by manually compiling the included C modules and then installing the package. In line with best practices on python project management, we **highly** recommend creating your local installation of respymethods in a `uv` virtual environment.
+
+#### Unix (Linux + MacOS)
+From the parent repository folder (or the location where you usually stash your venvs), create a uv virtual environment:
 
 ```bash
 uv venv respyvenv
@@ -58,38 +73,30 @@ and activate it with:
 source respyvenv/bin/activate
 ```
 
-#### 3. Package installation
-#### Linux
-On Linux, you can install respymethods and automatically build its C dependencies in one step. Navigate to the python folder inside the parent repository folder and run:
+Then, install the required packages in the virtual environment:
 
 ```bash
-cd python/
-uv pip install -e .
+uv pip install setuptools numpy scipy matplotlib pyfftw
 ```
 
-Upon successful installation, `src/respymethods/` contains a `build` folder and `.so` files for the C modules.
-
-#### MacOS
-Unfortunately, on MacOS a simple editable installation of the package installs the package, but **silently** fails to compile and build the C modules. Instead, they have to be compiled manually before package installation.
-First, install the required packages in the virtual environment:
+Manually compile the C modules by navigating into python/src/respymethods and running:
 
 ```bash
-uv pip install setuptools numpy scipy matplotlib pyfftw setuptools
-```
-
-Then, manually compile the C modules by navigating into python/src/respymethods and running:
-
-```bash
+cd $PATH/respmethods/python/src/respymethods/
 python setup.py build_ext --inplace
 ```
 
 Upon successful compilation, `src/respymethods` then contains a `build` folder and `.so` files for the C modules.
-Then, navigate back to the package root folder at `respmethods/python` and install using:
+Navigate back to the package root folder at `respmethods/python` and install using:
 
 ```bash
 cd ../..
 uv pip install -e .
 ```
+
+#### Windows
+Windows build and installation still subject to testing, will be added soon.
+
 
 ### Functions
 Detailed documentation of all included functions to be added soon.
