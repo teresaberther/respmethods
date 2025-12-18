@@ -1,2 +1,14 @@
 .DS_Store
 *.asv
+*.pyc
+
+# compilation byproducts
+*.so
+*.o
+*.egg-info
+
+# MATLAB data
+*.mat
+
+# Python data
+*.npy

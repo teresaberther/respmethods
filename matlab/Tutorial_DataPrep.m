@@ -106,6 +106,7 @@ for isub = 1:numel(ids)
 
 end
 
+
 %% Compute outcome (hit rates) ~ respiration phase
 % example outcome here is hit rate, but can be any outcome variable
 binhr = nan(numel(ids), nbin);                                              
