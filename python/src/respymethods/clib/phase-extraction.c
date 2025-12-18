@@ -2,6 +2,11 @@
 #include <Python.h>
 #include <numpy/arrayobject.h>
 
+#include <math.h>
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 
 static PyObject *two_point_interp(PyObject *self, PyObject *args) {
 

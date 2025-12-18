@@ -61,16 +61,20 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 #### 2. Package installation
 Respymethods will receive a Python Package Index in the future for easy installation using `pip`. The beta-dev version can be installed by manually compiling the included C modules and then installing the package. In line with best practices on python project management, we **highly** recommend creating your local installation of respymethods in a `uv` virtual environment.
 
-#### Unix (Linux + MacOS)
-From the parent repository folder (or the location where you usually stash your venvs), create a uv virtual environment:
+Package installation works the same both on Unix and Windows platforms once `uv` has been installed.
+From the parent repository folder (or the location where you usually stash your venvs), create a uv virtual environment in the Terminal (Unix)/Windows Powershell Prompt(Windows):
 
 ```bash
 uv venv respyvenv
 ```
-and activate it with:
 
+on **Unix**, activate it with:
 ```bash
 source respyvenv/bin/activate
+```
+and on **Windows** with:
+```powershell
+respyvenv\Scripts\activate
 ```
 
 Then, install the required packages in the virtual environment:
@@ -93,9 +97,6 @@ Navigate back to the package root folder at `respmethods/python` and install usi
 cd ../..
 uv pip install -e .
 ```
-
-#### Windows
-Windows build and installation still subject to testing, will be added soon.
 
 
 ### Functions
