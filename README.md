@@ -7,8 +7,8 @@ Berther, T., Balestrieri, E., Saltafossi, M., Paulsen, L. B., Andersen, L. M., K
 Please cite this paper when the provided code is used.
 
 ## Contents:
-- [MATLAB toolbox](matlab-toolbox---respLABmethods)
-- [Python package](python-package---respymethods)
+- [MATLAB toolbox](#matlab-toolbox---respLABmethods)
+- [Python package](#python-package---respymethods)
 
 # MATLAB toolbox - respLABmethods
 ### Install
