@@ -1,6 +1,6 @@
 import numpy as np
 import numba as nb
-
+import tomllib as toml 
 import matplotlib.pyplot as plt
 
 @nb.vectorize
@@ -8,11 +8,11 @@ def nb_binom(n, p):
     return np.random.binomial(n, p)
 
 @nb.njit
-def observer(ntrials, effect_mag, phase_lag, noise):
+def observer(n_trials, effect_mag, phase_lag, trl_noise):
     
-    phase_event = np.random.uniform(-np.pi, np.pi, ntrials)
+    phase_event = np.random.uniform(-np.pi, np.pi, n_trials)
     p_resp = (.5 + effect_mag*np.cos(phase_event + phase_lag) + 
-              np.random.randn(ntrials)*noise)
+              np.random.randn(n_trials)*trl_noise)
     resps = nb_binom(1, p_resp)
     resps = resps.astype(np.float64)
     
@@ -50,7 +50,7 @@ def create_phase_bins(phase_vect, center_bin, range_bin):
         
     return bin_idxs
 
-
+@nb.njit
 def pool_beh_resp(beh_events, bin_idxs):
     
     mv_avg = []
@@ -61,21 +61,65 @@ def pool_beh_resp(beh_events, bin_idxs):
         
     return np.array(mv_avg)
 
-def create_sample(nsubj, phase_lag_sd, noise):
-    return
+@nb.njit
+def create_sample(n_subjects, intersubj_noise, n_trials, trl_noise,
+                  effect_mag, range_bin, n_phase_bins, n_perms):
+    
+    center_bin = np.linspace(-np.pi, np.pi, n_phase_bins)
+    range_bin *= np.pi # range_bin is a pi multiplier
+    smpl_hr = np.empty((n_phase_bins, n_subjects))
+    perms_hr = np.empty((n_phase_bins, n_subjects, n_perms))    
+    
+    for isubj in range(n_subjects):
+        
+        subj_lag = np.random.randn()*intersubj_noise
+        exp_obs = observer(n_trials, effect_mag, subj_lag, trl_noise)
+        binned = create_phase_bins(exp_obs[:, 0], center_bin, range_bin)
+        hr_obs = pool_beh_resp(exp_obs, binned)
+        smpl_hr[:,isubj] = hr_obs
+        
+        tmp_bins = exp_obs[:, 0]
+        for iperm in range(n_perms):
+            
+            np.random.shuffle(tmp_bins)
+            perm_binned = create_phase_bins(tmp_bins, center_bin, range_bin)
+            ps_hr = pool_beh_resp(exp_obs, perm_binned)
+            perms_hr[:, isubj, iperm] = ps_hr
+        
+    return smpl_hr, perms_hr, center_bin
+
+
+
+
+
+def create_dict_from_toml(fname):
+    
+    cfg = {}
+    ncombs_counter = 1
+    with open(fname, 'rb') as f:
+        fc = toml.load(f)        
+        for cfg_name, cfg_values in fc.items():            
+            if "fixed_range" in cfg_values.keys():            
+                cfg.update({cfg_name : np.array(cfg_values["fixed_range"])})
+            else:
+                fr = np.linspace(cfg_values["strtval"],
+                                 cfg_values["endval"],
+                                 num=cfg_values["n_entries"])
+                cfg.update({cfg_name : fr})
+            ncombs_counter *= len(cfg[cfg_name])
+        print(f"\n{ncombs_counter} combinations will be created. \n")
+    return cfg
+
 
 #%%  common
 
-ntrials = 500
-effect_mag = .2
-phase_lag = .2
-center_bin = np.linspace(-np.pi, np.pi, 51)
-range_bin = np.pi/10
-noise = .001
+# ntrials = 500
+# effect_mag = .2
+# phase_lag = .2
+# center_bin = np.linspace(-np.pi, np.pi, 51)
+# range_bin = np.pi/10
+# noise = .001
 
-exp_obs = observer(ntrials, effect_mag, phase_lag, noise)
-binned = create_phase_bins(exp_obs[:, 0], center_bin, range_bin)
-hr_obs = pool_beh_resp(exp_obs, binned)
 
-plt.figure()
-plt.plot(center_bin, hr_obs)
+# plt.figure()
+# plt.plot(center_bin, hr_obs)

@@ -22,19 +22,23 @@ fixed_range = [51]
 [n_trials]
 fixed_range = [100, 500]
 
+[n_perms] # number of permutations to be executed for hypothesis testing
+fixed_range = [1000]
+
 [effect_mag]
 strtval = 0.01
 endval = 0.3
 n_entries = 10 
 
-[noise]
+[trl_noise] # noise at the single trial level
 fixed_range = [0.001]
 
-[range_bin]
-fixed_range = [0.1] # times pi
+[intersubj_noise] # noise in phase coherence inter subjects
+fixed_range = [0]
 
-[phase_lag]
-fixed_range = [0.2]
+[range_bin]
+fixed_range = [0.1] # pi multiplier, to avoid setting pi itself here
+
 
 
 

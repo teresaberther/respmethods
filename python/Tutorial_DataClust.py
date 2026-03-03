@@ -32,5 +32,5 @@ permemp_t = np.sqrt(nsubj)*tmp_z.mean(axis=0)/tmp_z.std(axis=0)
 emp_t = permemp_t[:, -1]
 perm_t = permemp_t[:, 0:-1]
 
-[summary, bounds] = circ_perm(emp_t, perm_t, theta)
+[bounds, summary] = circ_perm(emp_t, perm_t, theta)
 
