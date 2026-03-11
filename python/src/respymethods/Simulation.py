@@ -13,6 +13,9 @@ def observer(n_trials, effect_mag, phase_lag, trl_noise):
     phase_event = np.random.uniform(-np.pi, np.pi, n_trials)
     p_resp = (.5 + effect_mag*np.cos(phase_event + phase_lag) + 
               np.random.randn(n_trials)*trl_noise)
+    ## maintain the presp within plausible range 
+    # ...
+    
     resps = nb_binom(1, p_resp)
     resps = resps.astype(np.float64)
     
