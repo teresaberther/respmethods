@@ -40,3 +40,6 @@ gavg = smpl.mean(axis=1)
 plt.figure()
 plt.plot(theta, emp_t)
 
+#%%
+out = sim.sdt(summary, tmp_dict["effect_mag"], tmp_dict["n_phase_bins"])
+

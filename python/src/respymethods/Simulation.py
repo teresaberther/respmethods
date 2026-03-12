@@ -8,13 +8,22 @@ def nb_binom(n, p):
     return np.random.binomial(n, p)
 
 @nb.njit
+def model_resp(n_trials, effect_mag, phase_event, phase_lag, trl_noise):
+    
+    p_resp = (.5 + effect_mag*np.cos(phase_event + phase_lag) + 
+              np.random.randn(n_trials)*trl_noise)
+    
+    return p_resp
+
+@nb.njit
 def observer(n_trials, effect_mag, phase_lag, trl_noise):
     
     phase_event = np.random.uniform(-np.pi, np.pi, n_trials)
-    p_resp = (.5 + effect_mag*np.cos(phase_event + phase_lag) + 
-              np.random.randn(n_trials)*trl_noise)
+    p_resp = model_resp(n_trials, effect_mag, phase_event, phase_lag, trl_noise)
+ 
     ## maintain the presp within plausible range 
-    # ...
+    p_resp[p_resp<=0] = .01
+    p_resp[p_resp>=1] = .99
     
     resps = nb_binom(1, p_resp)
     resps = resps.astype(np.float64)
@@ -92,9 +101,6 @@ def create_sample(n_subjects, intersubj_noise, n_trials, trl_noise,
     return smpl_hr, perms_hr, center_bin
 
 
-
-
-
 def create_dict_from_toml(fname):
     
     cfg = {}
@@ -112,6 +118,55 @@ def create_dict_from_toml(fname):
             ncombs_counter *= len(cfg[cfg_name])
         print(f"\n{ncombs_counter} combinations will be created. \n")
     return cfg
+
+
+def sdt(summary, effect_mag, n_phase_bins):
+    
+    center_bin = np.linspace(-np.pi, np.pi, n_phase_bins)
+    
+    if effect_mag:
+    
+        # pre-set value for compatibility
+        trl_noise = 0
+        phase_lag = 0
+        n_trials = n_phase_bins
+        p_resp = model_resp(n_trials, effect_mag, center_bin, phase_lag, trl_noise)
+    
+        # boundaries: +- 0.5 effect magnitude 
+        up_idxs = np.where(p_resp > (p_resp.mean()+.5*effect_mag))
+        low_idxs = np.where(p_resp < (p_resp.mean()-.5*effect_mag))
+        
+        effect_exists = True
+
+    else:
+        
+        effect_exists = False
+        up_idxs, low_idxs = [], []
+           
+    H,FA,M,CR = 0,0,0,0      
+    acc_effect = 0
+    for iclust_p in summary['p']:
+        if iclust_p < .05:
+            if summary['clustmass_stat'][acc_effect] > 0:
+                H += (all(summary['idxs'][acc_effect]) in up_idxs)
+            elif summary['clustmass_stat'][acc_effect] < 0:
+                H += (all(summary['idxs'][acc_effect]) in low_idxs)
+            else:
+                FA += 1                
+        else:
+            if effect_exists: 
+                M+=1
+            else: 
+                CR += 1
+                
+        acc_effect += 1
+    
+    sdt_dict = {"H" : H,
+                "M" : M,
+                "FA" : FA,
+                "CR" : CR}
+    
+    return sdt_dict
 
 
 #%%  common
