@@ -128,11 +128,14 @@ def _local_clust(masklength, anglevect):
         cmplx_repr = masklength * np.exp(anglevect * 1j)        
         
         [X, Y] = np.meshgrid(cmplx_repr, cmplx_repr)        
-        dists = np.round(np.abs(X-Y), 5)
+        dists = np.round(np.abs(X-Y), 5)  
         minsigdist = np.unique(dists)
         
-        shortlenarc = dists==minsigdist[1];
-        [row, col] = np.where(shortlenarc)
+        if len(minsigdist)<3:            
+            row, col = np.array(masklength), np.array(masklength)
+        else:
+            shortlenarc = dists==minsigdist[1];
+            row, col = np.where(shortlenarc)
 
         acc = 0
         clusts = []
