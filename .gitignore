@@ -12,3 +12,6 @@
 
 # Python data
 *.npy
+
+# Generic Data files
+*.csv

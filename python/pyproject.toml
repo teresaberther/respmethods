@@ -12,6 +12,8 @@ dependencies = [
 	"scipy",
 	"pyfftw",
 	"matplotlib",
+	"numba,"
+	"tomllib",
 ]
 authors = [
 	{name = "Elio Balestrieri", email = "ebalestr@uni-muenster.de"},

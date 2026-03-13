@@ -1,7 +1,6 @@
 import numpy as np
 import numba as nb
 import tomllib as toml 
-import matplotlib.pyplot as plt
 
 @nb.vectorize
 def nb_binom(n, p):
@@ -133,51 +132,39 @@ def sdt(summary, effect_mag, n_phase_bins):
         p_resp = model_resp(n_trials, effect_mag, center_bin, phase_lag, trl_noise)
     
         # boundaries: +- 0.5 effect magnitude 
-        up_idxs = np.where(p_resp > (p_resp.mean()+.5*effect_mag))
-        low_idxs = np.where(p_resp < (p_resp.mean()-.5*effect_mag))
+        up_idxs = np.where(p_resp > (p_resp.mean()+.5*effect_mag))[0]
+        low_idxs = np.where(p_resp < (p_resp.mean()-.5*effect_mag))[0]
         
-        effect_exists = True
-
     else:
         
-        effect_exists = False
         up_idxs, low_idxs = [], []
            
-    H,FA,M,CR = 0,0,0,0      
+    H,FA = 0,0      
     acc_effect = 0
     for iclust_p in summary['p']:
         if iclust_p < .05:
             if summary['clustmass_stat'][acc_effect] > 0:
-                H += (all(summary['idxs'][acc_effect]) in up_idxs)
+                if set(summary['idxs'][acc_effect]).issubset(up_idxs):                    
+                    H = 1
+                elif set(up_idxs).issubset(summary['idxs'][acc_effect]):       # This condition is for those situations where, with high effect size,
+                    H = 1                                                      # the cluster actually exceeds the boundaries of what is considered
+                                                                               # part of the effect. Inverting the sets solves conceptually the issue,
+                                                                               # without casusing spurious effects to be detected as hits.                    
+                else:
+                    FA = 1                                        
             elif summary['clustmass_stat'][acc_effect] < 0:
-                H += (all(summary['idxs'][acc_effect]) in low_idxs)
+                if set(summary['idxs'][acc_effect]).issubset(low_idxs):
+                    H = 1
+                elif set(low_idxs).issubset(summary['idxs'][acc_effect]):      # Same as before
+                    H = 1
+                else:
+                    FA = 1
             else:
-                FA += 1                
-        else:
-            if effect_exists: 
-                M+=1
-            else: 
-                CR += 1
-                
-        acc_effect += 1
+                FA = 1    
     
     sdt_dict = {"H" : H,
-                "M" : M,
                 "FA" : FA,
-                "CR" : CR}
+                }
     
     return sdt_dict
 
-
-#%%  common
-
-# ntrials = 500
-# effect_mag = .2
-# phase_lag = .2
-# center_bin = np.linspace(-np.pi, np.pi, 51)
-# range_bin = np.pi/10
-# noise = .001
-
-
-# plt.figure()
-# plt.plot(center_bin, hr_obs)
