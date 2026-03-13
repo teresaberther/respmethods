@@ -56,11 +56,14 @@ def run_batch_sims(batch_sims):
 
 
 def distribute_sims(cfg_list, n_procs):
+
+    if len(cfg_list)%(n_procs):
+        n_procs -= 1
     
-    n_simXproc = len(cfg_list)//(n_procs-1)
+    n_simXproc = len(cfg_list)//(n_procs)
 
     batched_sims = []
-    for iproc in range(n_procs-1):        
+    for iproc in range(n_procs):        
         single_batch = []
         for isim in range(n_simXproc):
             this_sim = cfg_list.pop()
