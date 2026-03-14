@@ -78,7 +78,7 @@ def distribute_sims(cfg_list, n_procs):
 
 if __name__ == "__main__":
 
-    n_procs = 93
+    n_procs = 217
     compose_name = f"palma-{n_procs}"
     
     fc = sim.create_dict_from_toml(f"{compose_name}.toml")
