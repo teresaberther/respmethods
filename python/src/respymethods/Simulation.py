@@ -151,7 +151,7 @@ def sdt(summary, effect_mag, n_phase_bins):
             if summary['clustmass_stat'][acc_effect] > 0:
                 if set(summary['idxs'][acc_effect]).issubset(up_idxs):                    
                     H = 1
-                elif set(up_idxs).issubset(summary['idxs'][acc_effect]) & effect_mag:       # This condition is for those situations where, with high effect size,
+                elif set(up_idxs).issubset(summary['idxs'][acc_effect]) and effect_mag:     # This condition is for those situations where, with high effect size,
                     H = 1                                                                   # the cluster actually exceeds the boundaries of what is considered
                                                                                             # part of the effect. Inverting the sets solves conceptually the issue,
                                                                                             # without casusing spurious effects to be detected as hits.                    
@@ -160,7 +160,7 @@ def sdt(summary, effect_mag, n_phase_bins):
             elif summary['clustmass_stat'][acc_effect] < 0:
                 if set(summary['idxs'][acc_effect]).issubset(low_idxs):
                     H = 1
-                elif set(low_idxs).issubset(summary['idxs'][acc_effect]) & effect_mag:      # Same as before
+                elif set(low_idxs).issubset(summary['idxs'][acc_effect]) and effect_mag:     # Same as before
                     H = 1
                 else:
                     FA = 1
