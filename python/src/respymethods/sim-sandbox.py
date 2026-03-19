@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.stats import zscore
+from scipy.stats import zscore, iqr
 import pandas as pd
 from copy import copy
 
@@ -8,7 +8,7 @@ from itertools import product
 
 # respmethods
 import Simulation as sim
-from RespStats import circ_perm
+from RespStats import circ_perm, omni_perm
 
 from multiprocessing import Pool
 import random
@@ -20,23 +20,38 @@ def run_batch_sims(batch_sims):
     for idict in batch_sims:
         
         n_reps_sims = idict.pop("n_reps_sims")
+        stat_type = idict.pop("stat_type")
+        mc_method = idict.pop("mc_method")
+        
         for irep in range(n_reps_sims):
         
             tmp_dict = copy(idict)    
             
             try:
-                smpl, perms, theta = sim.create_sample(**tmp_dict)
+                smpl, perms, theta = sim.create_sample(**tmp_dict)                
+                # note: dimensions here are phase, subj, perms (differently from the Tutorial)
+                
                 aggr_dat = np.concatenate((perms, smpl[:, :, np.newaxis]), 
                                           axis=2)
                 tmp_z = zscore(aggr_dat, axis=2)
             
-                permemp_t = (np.sqrt(tmp_dict["n_subjects"])*
-                             tmp_z.mean(axis=1)/tmp_z.std(axis=1))
+                match stat_type.lower():             
+                    case "tval":
+                        permemp = (np.sqrt(tmp_dict["n_subjects"])*
+                                   tmp_z.mean(axis=1)/tmp_z.std(axis=1)) # along axis 0 in Tutorial...
+                    case "robust":
+                        permemp = np.median(tmp_z, axis=1)/iqr(tmp_z, axis=1)
+
             
-                emp_t = permemp_t[:, -1]
-                perm_t = permemp_t[:, 0:-1]
+                emp = permemp[:, -1]
+                perm = permemp[:, 0:-1]
             
-                [bounds, summary] = circ_perm(emp_t, perm_t, theta)
+                match mc_method.lower():                
+                    case "circ":                                    
+                        [bounds, summary] = circ_perm(emp, perm, theta)
+                    case "omni":
+                        [bounds, summary] = omni_perm(emp, perm, theta)
+                        
                 out = sim.sdt(summary, tmp_dict["effect_mag"], 
                               tmp_dict["n_phase_bins"])    
             except:
@@ -47,6 +62,9 @@ def run_batch_sims(batch_sims):
                 tmp_dict[key] = value
                 
             tmp_dict["rep_idx"] = irep
+            tmp_dict["stat_type"] = stat_type
+            tmp_dict["mc_method"] = mc_method
+            
         
             updated_dicts.append(tmp_dict) 
             
@@ -78,9 +96,12 @@ def distribute_sims(cfg_list, n_procs):
 
 if __name__ == "__main__":
 
-    n_procs = 217
-    compose_name = f"palma-{n_procs}"
-    
+    # n_procs = 248
+    # compose_name = f"palma-{n_procs}"
+    n_procs = 10
+    compose_name = "sim-cfg"
+
+
     fc = sim.create_dict_from_toml(f"{compose_name}.toml")
     
     # generation of all the parameters combination

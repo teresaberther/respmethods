@@ -31,17 +31,22 @@ fixed_range = [5]
 [effect_mag]
 strtval = 0.01
 endval = 0.3
-n_entries = 10 
+n_entries = 5
 
 [trl_noise] # noise at the single trial level
-fixed_range = [0.001]
+fixed_range = [-3]
 
 [intersubj_noise] # noise in phase coherence inter subjects
-fixed_range = [0]
+fixed_range = [-3]
 
 [range_bin] # binning width
 fixed_range = [0.1] # pi multiplier, to avoid setting pi itself here
 
+[stat_type] # T values? Robust scaling?
+fixed_range = ["Tval", "Robust"]
+
+[mc_method] # Multiple correction method
+fixed_range = ["circ", "omni"]
 
 
 

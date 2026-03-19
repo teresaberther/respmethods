@@ -79,7 +79,7 @@ def create_sample(n_subjects, intersubj_noise, n_trials, trl_noise,
     trl_noise = np.exp(trl_noise)
     intersubj_noise = np.exp(intersubj_noise)
     center_bin = np.linspace(-np.pi, np.pi, n_phase_bins)
-    range_bin *= np.pi # range_bin is a pi multiplier
+    range_bin *= 2*np.pi # range_bin is a pi multiplier
     smpl_hr = np.empty((n_phase_bins, n_subjects))
     perms_hr = np.empty((n_phase_bins, n_subjects, n_perms))    
     
@@ -136,9 +136,10 @@ def sdt(summary, effect_mag, n_phase_bins):
         n_trials = n_phase_bins
         p_resp = model_resp(n_trials, effect_mag, center_bin, phase_lag, trl_noise)
     
-        # boundaries: +- 0.5 effect magnitude 
-        up_idxs = np.where(p_resp > (p_resp.mean()+effect_mag/3))[0]
-        low_idxs = np.where(p_resp < (p_resp.mean()-effect_mag/3))[0]
+        # select that at least the direction is correct (i.e. positive or negative)
+        # to assign a hit
+        up_idxs = np.where(p_resp > np.mean(p_resp))[0]
+        low_idxs = np.where(p_resp < np.mean(p_resp))[0]
         
     else:
         
@@ -151,16 +152,10 @@ def sdt(summary, effect_mag, n_phase_bins):
             if summary['clustmass_stat'][acc_effect] > 0:
                 if set(summary['idxs'][acc_effect]).issubset(up_idxs):                    
                     H = 1
-                elif set(up_idxs).issubset(summary['idxs'][acc_effect]) and effect_mag:     # This condition is for those situations where, with high effect size,
-                    H = 1                                                                   # the cluster actually exceeds the boundaries of what is considered
-                                                                                            # part of the effect. Inverting the sets solves conceptually the issue,
-                                                                                            # without casusing spurious effects to be detected as hits.                    
                 else:
                     FA = 1                                        
             elif summary['clustmass_stat'][acc_effect] < 0:
                 if set(summary['idxs'][acc_effect]).issubset(low_idxs):
-                    H = 1
-                elif set(low_idxs).issubset(summary['idxs'][acc_effect]) and effect_mag:     # Same as before
                     H = 1
                 else:
                     FA = 1

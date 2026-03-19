@@ -164,5 +164,42 @@ def _local_clust(masklength, anglevect):
 
 
 
+def omni_perm(EMPdat, PERMdat, theta):
+        
+    PERMEMPdat = np.concatenate((PERMdat, EMPdat[:, np.newaxis]), axis=1)
+
+    up_dist = PERMEMPdat.max(axis=0)
+    low_dist = PERMEMPdat.min(axis=0)
+
+    up_ECDF = ecdf(up_dist)
+    low_ECDF = ecdf(low_dist)
+
+    low_bound = low_ECDF.cdf.quantiles[low_ECDF.cdf.probabilities<=.025][-1]
+    up_bound = up_ECDF.cdf.quantiles[up_ECDF.cdf.probabilities>=.975][0]
+
+
+    up_idxs = list(np.where(EMPdat > up_bound)[0])
+    low_idxs = list(np.where(EMPdat < low_bound)[0])
+    all_idxs = up_idxs + low_idxs
+
+    # for compatibility
+    summary_omni = {"clustmass_stat" : [],
+                    "idxs" : [],
+                    "p" : [],
+                    "p_ecdf" : [],
+                    }
+    
+    for idx in all_idxs:
+        
+        summary_omni["clustmass_stat"].append(EMPdat[idx])
+        summary_omni["idxs"].append([idx])
+        summary_omni["p"].append(np.float64(.001))
+        summary_omni["p_ecdf"].append(np.float64(.001))
+    
+    bounds = {"upper" : np.ones(theta.shape)*up_bound,
+              "lower" : np.ones(theta.shape)*low_bound,
+              }
+
+    return bounds, summary_omni
 
 

@@ -14,7 +14,7 @@
 fixed_range = [10, 20, 30]
 
 [n_phase_bins]
-fixed_range = [31, 41, 51]
+fixed_range = [30, 45, 60, 75]
 # strtval = 41
 # endval = 51
 # n_entries = 11
@@ -34,14 +34,22 @@ endval = 0.3
 n_entries = 31
 
 [trl_noise] # noise at the single trial level
-strtval = -4
+strtval = -3
 endval = 0
 n_entries = 7
 
 [intersubj_noise] # noise in phase coherence inter subjects
-strtval = -4
+strtval = -3
 endval = 0
 n_entries = 7
 
 [range_bin] # binning width
-fixed_range = [0.1] # pi multiplier, to avoid setting pi itself here
+fixed_range = [0.05, 0.1, 0.2] # 2pi multiplier, to avoid setting pi itself here
+
+[stat_type] # T values? Robust scaling?
+fixed_range = ["Tval", "Robust"]
+
+[mc_method] # Multiple correction method
+fixed_range = ["circ", "omni"]
+
+
