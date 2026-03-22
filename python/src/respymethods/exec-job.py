@@ -3,16 +3,13 @@ from scipy.stats import zscore, iqr
 import pandas as pd
 from copy import copy
 
-# pack configs combinations
-from itertools import product
-
 # respmethods
 import Simulation as sim
 from RespStats import circ_perm, omni_perm
 
 from multiprocessing import Pool
-import random
-
+import argparse
+import pickle
 
 def run_batch_sims(batch_sims):
     
@@ -94,25 +91,39 @@ def distribute_sims(cfg_list, n_procs):
     return batched_sims
 
 
-if __name__ == "__main__":
-
-    n_procs = 248
-    compose_name = f"palma-{n_procs}"
-    # n_procs = 10
-    # compose_name = "sim-cfg"
-
-
-    fc = sim.create_dict_from_toml(f"{compose_name}.toml")
+def main():
     
-    # generation of all the parameters combination
-    combinations = product(*fc.values())
-    cfg_list = [dict(zip(fc.keys(), c)) for c in combinations]
-    random.shuffle(cfg_list)
+    parser = argparse.ArgumentParser(
+    description="Run simulation from the cfg."
+    )
+
+    parser.add_argument(
+        "path",
+        type=str,
+        help="Path to the folder containing the cfg."
+    )
+
+    parser.add_argument(
+        "n_procs",
+        type=int,
+        help="Number of processors for multiprocessing"
+    )
+
+    args = parser.parse_args()
+    fname = f"{args.path}/cfg.pkl"
+    with open(fname, "rb") as f:
+        cfg_list = pickle.load(f)
     
-    batched_sims = distribute_sims(cfg_list, n_procs)
+    batched_sims = distribute_sims(cfg_list, args.n_procs)
 
     with Pool(len(batched_sims)) as p:
         DFs_bag = p.map(run_batch_sims, batched_sims)
 
-    DF = pd.concat(DFs_bag)
-    DF.to_csv(f"{compose_name}.csv")
+    DF = pd.concat(DFs_bag, ignore_index=True)
+    DF.to_csv(f"{args.path}/out.csv", index=False)
+    
+
+if __name__ == "__main__":
+
+    main()
+
