@@ -128,40 +128,23 @@ def sdt(summary, effect_mag, n_phase_bins):
     
     center_bin = np.linspace(-np.pi, np.pi, n_phase_bins)
     
-    if effect_mag:
-    
-        # pre-set value for compatibility
-        trl_noise = 0
-        phase_lag = 0
-        n_trials = n_phase_bins
-        p_resp = model_resp(n_trials, effect_mag, center_bin, phase_lag, trl_noise)
-    
-        # select that at least the direction is correct (i.e. positive or negative)
-        # to assign a hit
-        up_idxs = np.where(p_resp > np.mean(p_resp))[0]
-        low_idxs = np.where(p_resp < np.mean(p_resp))[0]
+    trl_noise = 0
+    phase_lag = 0
+    n_trials = n_phase_bins
+    p_resp = model_resp(n_trials, effect_mag, center_bin, phase_lag, trl_noise)
+            
         
-    else:
-        
-        up_idxs, low_idxs = [], []
-           
     H,FA = 0,0      
     acc_effect = 0
     for iclust_p in summary['p']:
-        if iclust_p < .05:
-            if summary['clustmass_stat'][acc_effect] > 0:
-                if set(summary['idxs'][acc_effect]).issubset(up_idxs):                    
-                    H = 1
-                else:
-                    FA = 1                                        
-            elif summary['clustmass_stat'][acc_effect] < 0:
-                if set(summary['idxs'][acc_effect]).issubset(low_idxs):
-                    H = 1
-                else:
-                    FA = 1
+        if iclust_p < .05:            
+            sign_theory = np.sign(p_resp[summary['idxs'][acc_effect]].sum())
+            sign_clustmass = np.sign(summary['clustmass_stat'][acc_effect])
+            if sign_clustmass == sign_theory:
+                H=1
             else:
-                FA = 1    
-       
+                FA=1
+                   
         acc_effect += 1
         
     sdt_dict = {"H" : H,
