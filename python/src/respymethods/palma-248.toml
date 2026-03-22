@@ -51,5 +51,3 @@ fixed_range = ["Tval", "Robust"]
 
 [mc_method] # Multiple correction method
 fixed_range = ["circ", "omni"]
-
-

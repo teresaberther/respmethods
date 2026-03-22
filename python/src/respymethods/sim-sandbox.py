@@ -96,10 +96,10 @@ def distribute_sims(cfg_list, n_procs):
 
 if __name__ == "__main__":
 
-    # n_procs = 248
-    # compose_name = f"palma-{n_procs}"
-    n_procs = 10
-    compose_name = "sim-cfg"
+    n_procs = 248
+    compose_name = f"palma-{n_procs}"
+    # n_procs = 10
+    # compose_name = "sim-cfg"
 
 
     fc = sim.create_dict_from_toml(f"{compose_name}.toml")
