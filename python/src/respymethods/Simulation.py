@@ -132,21 +132,21 @@ def sdt(summary, effect_mag, n_phase_bins):
     phase_lag = 0
     n_trials = n_phase_bins
     p_resp = model_resp(n_trials, effect_mag, center_bin, phase_lag, trl_noise)
-            
+    # demean p_resp to avoid false signs
+    p_resp = p_resp-p_resp.mean()
         
     H,FA = 0,0      
-    acc_effect = 0
-    for iclust_p in summary['p']:
+    for idx_effect, iclust_p in enumerate(summary['p']):
         if iclust_p < .05:            
-            sign_theory = np.sign(p_resp[summary['idxs'][acc_effect]].sum())
-            sign_clustmass = np.sign(summary['clustmass_stat'][acc_effect])
-            if sign_clustmass == sign_theory:
+            sign_theory = np.sign(p_resp[summary['idxs'][idx_effect]].sum())
+            sign_clustmass = np.sign(summary['clustmass_stat'][idx_effect])
+
+            if (sign_clustmass == sign_theory) and effect_mag:
                 H=1
             else:
                 FA=1
-                   
-        acc_effect += 1
-        
+
+                           
     sdt_dict = {"H" : H,
                 "FA" : FA,
                 }
