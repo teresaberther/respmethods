@@ -5,7 +5,7 @@ function [phasevec, first, last] = trapez_interp(ts, fs)
 % 
 %
 % Use as:
-%   [phasevec, first, last] = trapez_interp(ts)
+%   [phasevec, first, last] = trapez_interp(ts, fs)
 %
 % 
 % Input arguments: 
