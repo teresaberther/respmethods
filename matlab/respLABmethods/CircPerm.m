@@ -11,7 +11,7 @@ function [summary, bounds] = CircPerm(EMPdat, PERMdat, theta, alternative)
 %   EMPdat      = vector of empirical data across phase bins to be tested 
 %   PERMdat     = phase bins x permutation iterations matrix of surrogate data
 %   theta       = a vector of angles (in radians) from -pi to pi/0 to 2*pi, representing the phase bins of the data (phase bins x 1)
-%   alternative = string specifying alternative hypothesis, "two_sided", "greater" or "less" (default = "two_sided")
+%   alternative = string specifying alternative hypothesis, "two_sided", "greater" or "less"
 %
 % Output:
 %   summary            = structure containing the following fields:
@@ -41,15 +41,19 @@ end
 if size(PERMdat, 1) ~= length(theta)
     error('Dimension mismatch in surrogate data: expected input is a matrix of size phase bins x perm iterations.');
 end
+if nargin < 4 || isempty(alternative) 
+    error('Specify an alternative hypothesis for testing: "two_sided", "greater" or "less".');
+end
+
 
 % set boundaries for cluster definition according to alternative hypothesis
-if nargin < 4 || isempty(alternative) || strcmp(alternative, "two_sided")
+if strcmp(alternative, "two_sided")
     low_p = 0.025;
     up_p = 0.975;
 elseif strcmp(alternative, "greater")
     low_p = 0;
     up_p = 0.95;
-elseif strcmp(alternative, "lesser")
+elseif strcmp(alternative, "less")
     low_p = 0.05;
     up_p = 1;
 end 
