@@ -73,7 +73,7 @@ njobs = int(tot_combs / (job_reps*n_procs))
 
 jobs_list = split_list(cfg_list, njobs)
 cfg_path_list = []
-for idx, cfg in enumerate(jobs_list[0:4]):
+for idx, cfg in enumerate(jobs_list):
     
     job_fold = f"./{sim_name}/job-{idx}"
     Path(job_fold).mkdir(parents=True,
@@ -92,40 +92,62 @@ client = Client()
 ################################################################
 cpu_res = ResourceRequest(cpus=n_procs)
 
-task_list = []
-for job_path in cfg_path_list:
+n_batches = 7
+mini_batches = split_list(cfg_path_list, n_batches) 
 
-    cmd = ["python", "exec-job.py", job_path, n_procs]
-    job = Job()
+for ibatch in mini_batches: 
 
-    job.program(cmd,
-                resources=cpu_res,
-                stdout=f"{job_path}/out.log",
-                stderr=f"{job_path}/out.log",
-                )    
-    task_list.append(client.submit(job))
+    task_list = []
+    for job_path in ibatch:
 
-client.wait_for_jobs(task_list)
+        cmd = ["uv", "run", "exec-job.py", job_path, str(n_procs)]
+        job = Job(max_fails=5)
+
+        job.program(cmd,
+                    resources=cpu_res,
+                    )    
+        task_list.append(client.submit(job))
+
+    client.wait_for_jobs(task_list)
 
 #%% concatenate all DF in one
+# and resubmit jobs that did not produce output
 
-dfs = []
+dfs, repeat_task_list = [], []
+exceptions = 0
 for job_path in cfg_path_list:
     file = f"{job_path}/DF.csv"
     try:
         df = pd.read_csv(file)
         dfs.append(df)
-        print(f"  ✔ {file} — {len(df)} rows")
     except:
-        print(f"  ❌ {file} — {len(df)} rows")
-        
-        
+        print(f"  ❌ {file} ")
+        print("Resubmitting...")
+        cmd = ["uv", "run", "exec-job.py", job_path, str(n_procs)]
+        job = Job()
+        job.program(cmd,
+                    resources=cpu_res,
+                    )    
+        repeat_task_list.append(client.submit(job))
+        exceptions += 1
+
 final_df = pd.concat(dfs, ignore_index=True)
-final_df.to_csv(f"{sim_name}.csv", index=False)
+final_df.to_csv(f"{sim_name}-failed-{exceptions}.csv", index=False)
 
-    
+client.wait_for_jobs(repeat_task_list)
 
+#%% last round
 
+dfs =  []
+exceptions = 0
+for job_path in cfg_path_list:
+    file = f"{job_path}/DF.csv"
+    try:
+        df = pd.read_csv(file)
+        dfs.append(df)
+    except:
+        print(f"  ❌ {file} ")
+        exceptions += 1
 
-
-
+final_df = pd.concat(dfs, ignore_index=True)
+final_df.to_csv(f"{sim_name}-run2-failed-{exceptions}.csv", index=False)

@@ -1,3 +1,11 @@
+import os
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+
+
+# 
 import numpy as np
 from scipy.stats import zscore, iqr
 import pandas as pd
@@ -120,7 +128,7 @@ def main():
         DFs_bag = p.map(run_batch_sims, batched_sims)
 
     DF = pd.concat(DFs_bag, ignore_index=True)
-    DF.to_csv(f"{args.path}/out.csv", index=False)
+    DF.to_csv(f"{args.path}/DF.csv", index=False)
     
 
 if __name__ == "__main__":
