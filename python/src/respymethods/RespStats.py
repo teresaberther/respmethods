@@ -31,6 +31,7 @@ def circ_perm(EMPdat, PERMdat, theta, alternative):
 
     Copyright (C) 2026, Elio Balestrieri & Teresa Berther, University of Münster, Germany
     """
+
     match alternative:
         case "two_sided":
             low_p = 0.025
@@ -191,6 +192,7 @@ def _local_clust(masklength, anglevect):
 
     Copyright (C) 2026, Elio Balestrieri & Teresa Berther, University of Münster, Germany
     """
+
     if not np.any(masklength):
         clusts = []
     else:
@@ -257,6 +259,7 @@ def omni_perm(EMPdat, PERMdat, theta):
 
     Copyright (C) 2026, Elio Balestrieri & Teresa Berther, University of Münster, Germany
     """
+
     PERMEMPdat = np.concatenate((PERMdat, EMPdat[:, np.newaxis]), axis=1)
 
     up_dist = PERMEMPdat.max(axis=0)
