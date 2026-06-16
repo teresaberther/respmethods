@@ -120,9 +120,13 @@ else
     dists = round(abs(X - Y), 5);  % calculate distance and round to 5 decimals
     minsigdist = unique(dists);    % find unique distances
     
-    % identify the smallest non-zero distance to form clusters
-    shortlenarc = dists == minsigdist(2);
-    [row, col] = find(shortlenarc);  % find rows and columns of minimum distance
+    if numel(minsigdist) < 3       % account for clusters containing only one datapoint
+        row = masklength;
+        col = masklength;
+    else
+        shortlenarc = dists == minsigdist(2);
+        [row, col] = find(shortlenarc);
+    end
     
     % initialize cluster accumulation
     acc = 1; 
