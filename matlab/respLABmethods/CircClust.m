@@ -121,8 +121,8 @@ else
     minsigdist = unique(dists);    % find unique distances
     
     if numel(minsigdist) < 3       % account for clusters containing only one datapoint
-        row = masklength;
-        col = masklength;
+        row = find(masklength);
+        col = find(masklength);
     else
         shortlenarc = dists == minsigdist(2);
         [row, col] = find(shortlenarc);
