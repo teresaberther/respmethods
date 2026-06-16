@@ -12,6 +12,9 @@ dependencies = [
 	"scipy",
 	"pyfftw",
 	"matplotlib",
+	"numba",
+	"pandas",
+    "hyperqueue==0.24.0",
 ]
 authors = [
 	{name = "Elio Balestrieri", email = "ebalestr@uni-muenster.de"},

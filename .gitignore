@@ -12,3 +12,13 @@
 
 # Python data
 *.npy
+*.pkl
+
+# Generic Data files
+*.csv
+*.out
+*.log
+*.tar
+
+# uv
+*.lock
