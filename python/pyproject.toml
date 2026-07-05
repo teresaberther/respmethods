@@ -14,7 +14,11 @@ dependencies = [
 	"matplotlib",
 	"numba",
 	"pandas",
-    "hyperqueue==0.24.0",
+	"hyperqueue==0.24.0",
+	"pytest>=9.1.0",
+	"jupyterlab",
+	"seaborn",
+	"cmcrameri"
 ]
 authors = [
 	{name = "Elio Balestrieri", email = "ebalestr@uni-muenster.de"},
