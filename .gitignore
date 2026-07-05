@@ -22,3 +22,6 @@
 
 # uv
 *.lock
+
+# notebook byproducts
+.ipynb_checkpoints
