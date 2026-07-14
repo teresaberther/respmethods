@@ -82,9 +82,13 @@ for k = 1:nfft                                                              % co
 end
 [~,indopt] = min(Hl);
 
-phasevec = protophase;                                                      % transformation protophase --> phasevec
+pv = protophase;                                                            % transformation protophase --> phasevec
 for k = 1:indopt
-    phasevec = phasevec+2*imag(Spl(k)*(exp(1i*k*protophase)-1)/k);
+    pv = pv+2*imag(Spl(k)*(exp(1i*k*protophase)-1)/k);
 end
+
+phasevec = NaN(1, length(ts));
+phasevec(first:last) = pv;
+phasevec = phasevec - pi;
 
 end 
