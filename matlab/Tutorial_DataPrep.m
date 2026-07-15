@@ -17,7 +17,7 @@
 %   binhr.mat   = mean empirical outcome for each respiratory phase bin, for each subject
 %                 (subjects x phase bins matrix)
 %   sbinhr.mat  = mean surrogate outcome for each respiratory phase bin and surrogate, for each subject
-%                 (subjects x phase bins x surrogate iterations matrix) 
+%                 (subjects x phase bins x surrogate iterations matrix)
 %
 % Required Helper Functions:
 %   - two_point_interp: extracts phase of a signal by two-point interpolation
@@ -32,27 +32,28 @@ clearvars
 clc
 close all
 
-addpath(genpath('~/respmethods/'));
-datapath = '~/respmethods/_data/';                                          % contains raw respiration traces and events table
-outpath = '~/respmethods/_out/';
+addpath(genpath('~/respmethods/matlab/'));
+datapath = '~/respmethods/matlab/_exampledata/';                            % contains raw respiration traces and events table
+outpath = '~/respmethods/matlab/_out/';
 
 
 % subject ids
-ids = {'002' '003' '004' '005' '006' '007' '009' '010' '011' '012' '013' '014' '015' '016' '019' '020' '022' '023'};
+ids = {'001' '002' '003' '004' '005' '006' '007' '009' '010' '011' '012' '013' '014' '015' '016' '019' '020' '022' '023'};
 
 % config
-orgfs = 1000;                                                               % original sampling frequency of raw data
+orgfs = 600;                                                                % original sampling frequency of raw data
 fs = 100;                                                                   % final sampling frequency after downsampling
 
 niter = 5000;                                                               % number of surrogate iterations
 plvcrit = 0.1;                                                              % threshold for IAAFT surrogate generation, max PLV of surrogate with data
 nbin = 60;                                                                  % number of phase bins
-phw = 2*pi/10;                                                              % width of each phase bin
-pb = linspace(-pi,pi,nbin);                                                 % vector containing centre of each phase bin (= phase bin vector)
+phw = (2*pi/10)/2;                                                          % width of each phase bin, divided in half
+pb = linspace(-pi,pi,nbin+1);                                               % vector containing centre of each phase bin (= phase bin vector)
+pb(end) = [];
 
 load(fullfile(datapath, 'events.mat'));                                     % load stimulus onsets ("onsets") and outcome (here: "corr" for hit vs miss trials)
 
-%% Compute true and surrogate respiration phase values at stimulus onset 
+%% Compute true and surrogate respiration phase values at stimulus onset
 for isub = 1:numel(ids)
 
     disp(['Computing phase and surrogates for subject #' num2str(isub) '/' num2str(length(ids))]);
@@ -109,7 +110,7 @@ end
 
 %% Compute outcome (hit rates) ~ respiration phase
 % example outcome here is hit rate, but can be any outcome variable
-binhr = nan(numel(ids), nbin);                                              
+binhr = nan(numel(ids), nbin);
 sbinhr = nan(numel(ids), nbin, niter);
 
 for isub = 1:numel(ids)
@@ -128,7 +129,7 @@ for isub = 1:numel(ids)
     % surrogate binHR
     load(fullfile(outpath, ['surrogatephases_' num2str(isub) '.mat']),'surrphases');
     for k = 1:niter
-        sphase = surrphases(:, k);                                              
+        sphase = surrphases(:, k);
         for ibin = 1:nbin
             phsel = find((sphase>pb(ibin)-phw) & (sphase<pb(ibin)+phw) | ...     % again find trials for each phase bin...
                 (sphase-2*pi>pb(ibin)-phw) & (sphase-2*pi<pb(ibin)+phw)| ...

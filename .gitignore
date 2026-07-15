@@ -7,9 +7,6 @@
 *.o
 *.egg-info
 
-# MATLAB data
-*.mat
-
 # Python data
 *.npy
 *.pkl
