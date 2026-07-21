@@ -1,6 +1,7 @@
 .DS_Store
 *.asv
 *.pyc
+.Rhistory
 
 # compilation byproducts
 *.so
@@ -12,7 +13,6 @@
 *.pkl
 
 # Generic Data files
-*.csv
 *.out
 *.log
 *.tar
