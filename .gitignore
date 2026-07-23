@@ -1,21 +1,18 @@
 .DS_Store
 *.asv
 *.pyc
+.Rhistory
 
 # compilation byproducts
 *.so
 *.o
 *.egg-info
 
-# MATLAB data
-*.mat
-
 # Python data
 *.npy
 *.pkl
 
 # Generic Data files
-*.csv
 *.out
 *.log
 *.tar
