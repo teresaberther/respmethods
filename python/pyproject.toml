@@ -18,7 +18,8 @@ dependencies = [
 	"pytest>=9.1.0",
 	"jupyterlab",
 	"seaborn",
-	"cmcrameri"
+	"cmcrameri",
+	"setuptools",
 ]
 authors = [
 	{name = "Elio Balestrieri", email = "ebalestr@uni-muenster.de"},
