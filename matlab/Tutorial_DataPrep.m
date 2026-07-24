@@ -33,8 +33,7 @@ clc
 close all
 
 addpath(genpath('~/respmethods/matlab/'));
-datapath = '~/respmethods/matlab/_exampledata/';                            % contains raw respiration traces and events table
-outpath = '~/respmethods/matlab/_out/';
+datapath = '~/respmethods/_exampledata/';                                   % contains raw respiration traces and events table
 
 
 % subject ids
@@ -87,7 +86,7 @@ for isub = 1:numel(ids)
             continue                                                        % otherwise start over
         end
     end
-    save(fullfile(outpath, ['surrogates_iaaft_' num2str(isub) '.mat']),'allsresp', '-v7.3');
+    save(fullfile(datapath, ['surrogates_iaaft_' num2str(isub) '.mat']),'allsresp', '-v7.3');
 
     % get stimulus onsets in the respiration time frame
     % (= time from recording start in ms)
@@ -102,8 +101,8 @@ for isub = 1:numel(ids)
     end
 
     % save
-    save(fullfile(outpath, ['empiricalphase_' num2str(isub) '.mat']),'empphase');
-    save(fullfile(outpath, ['surrogatephases_' num2str(isub) '.mat']),'surrphases');
+    save(fullfile(datapath, ['empiricalphase_' num2str(isub) '.mat']),'empphase');
+    save(fullfile(datapath, ['surrogatephases_' num2str(isub) '.mat']),'surrphases');
 
 end
 
@@ -118,7 +117,7 @@ for isub = 1:numel(ids)
     disp(['Computing empirical and surrogate binned hit rates for subject #' num2str(isub) '/' num2str(length(ids))]);
 
     % empirical binHR
-    load(fullfile(outpath, ['empiricalphase_' num2str(isub) '.mat']),'empphase');
+    load(fullfile(datapath, ['empiricalphase_' num2str(isub) '.mat']),'empphase');
     for ibin = 1:nbin
         phsel = find((empphase>pb(ibin)-phw) & (empphase<pb(ibin)+phw) | ...     % find all trials whose phase falls within the current phase bin
             (empphase-2*pi>pb(ibin)-phw) & (empphase-2*pi<pb(ibin)+phw)| ...
@@ -127,7 +126,7 @@ for isub = 1:numel(ids)
     end
 
     % surrogate binHR
-    load(fullfile(outpath, ['surrogatephases_' num2str(isub) '.mat']),'surrphases');
+    load(fullfile(datapath, ['surrogatephases_' num2str(isub) '.mat']),'surrphases');
     for k = 1:niter
         sphase = surrphases(:, k);
         for ibin = 1:nbin
@@ -141,6 +140,6 @@ end
 
 % save mean hit rates ~ respiration phase bins for empirical & surrogate data
 % this is the data we run the circular clustering on
-save(fullfile(outpath, 'binhr.mat'), 'binhr');                              % subjects x nbins array of empirical phase-binned outcome values
-save(fullfile(outpath, 'surrbinhr.mat'), 'sbinhr');                         % subjects x nbins x niter array of surrogate phase-binned values
-save(fullfile(outpath, 'phasebinvect.mat'), 'pb');                          % also save the vector with the phase bin centres
+save(fullfile(datapath, 'binhr.mat'), 'binhr');                              % subjects x nbins array of empirical phase-binned outcome values
+save(fullfile(datapath, 'surrbinhr.mat'), 'sbinhr');                         % subjects x nbins x niter array of surrogate phase-binned values
+save(fullfile(datapath, 'phasebinvect.mat'), 'pb');                          % also save the vector with the phase bin centres

@@ -1,18 +1,21 @@
 %% Example script: Phase-amplitude coupling using Modulation Index
-% 
-% This script demonstrates how to calculate phase-amplitude coupling 
+%
+% This script demonstrates how to calculate phase-amplitude coupling
 % between respiration and global field power in neural resting state
-% data using the Modulation Index introduced by Tort (2010) 
+% data using the Modulation Index introduced by Tort (2010)
 % as described in [ref].
 %
 % Input:
-%   - raw respiration time series vector
-%   - preprocessed continuous neural data (nsignals x timepoints) 
+%   - z-scored respiration time series vector
+%   - preprocessed continuous neural data (nsignals x timepoints)
+%   -> usually both inputs are at same sampling frequency (concurrent
+%      recordings), already downsampled brain data provided here for storage
+%      space reasons
 %
 % Output:
 %   mis.mat     = empirical MIs, normalized on surrogate MI distribution and
 %                 expressed in units of SD (nsubj x nfreqs)
-%   surrmis.mat = surrogate MIs (nsubjs x nfreqs x niter) 
+%   surrmis.mat = surrogate MIs (nsubjs x nfreqs x niter)
 %
 % Required Helper Functions:
 %   - two_point_interp: extracts phase of a signal by two-point interpolation
@@ -20,18 +23,18 @@
 %                               of a signal
 %   - PLV: computes phase-locking value of two phase time series
 %
-% Copyright (C) 2026, Teresa Berther University of Münster, Germany 
+% Copyright (C) 2026, Teresa Berther University of Münster, Germany
 
 clearvars
 clc
 close all
 
 addpath(genpath('~/respmethods/'));
-datapath = '~/respmethods/_data/';                                          % contains raw respiration traces and neural data
+datapath = '~/respmethods/_exampledata/';                                   % contains raw respiration traces and neural data
 outpath = '~/respmethods/_out/';
 
 % subject ids
-ids = {'002' '003' '004' '005' '006' '007' '009' '010' '011' '012' '013' '014' '015' '016' '019' '020' '022' '023'};
+ids = {'004' '005' '006' '007' '009' '010' '011' '012' '013' '014' '015' '016' '019' '020' '022' '023'};
 
 % config
 orgfs = 300;                                                                % original sampling frequency of raw data
@@ -57,7 +60,7 @@ for isub = 1:length(ids)
     respfiles = dir(fullfile(datapath, pattern));
     load([datapath respfiles.name]);
 
-    x = downsample(zscore(data(1,:)), orgfs/fs);                            % downsample & zscore raw respiration signal
+    x = downsample(data, orgfs/fs);                                         % downsample respiration signal
     x = movmean(x, 0.4*fs);                                                 % some smoothing
 
     % extract phase vector of empirical data using two-point interpolation
@@ -84,34 +87,34 @@ for isub = 1:length(ids)
     end
     save(fullfile(outpath, ['surrogates_iaaft_' num2str(isub) '.mat']),'allsresp', '-v7.3');
 
-    %% Prepare neural data 
+    %% Prepare neural data
     pattern = sprintf('*meg_%s.mat', ids{isub});
     neurofiles = dir(fullfile(datapath, pattern));
     load([datapath neurofiles.name]);
-    
-    resmeg = downsample(megraw.', orgfs/fs).';                              % downsample neural data
 
-    gfp = zeros(nfreqs, size(resmeg, 2));                                   % struct for global field power, size frequencies x nsignals
-    fb = cwtfilterbank('SignalLength', size(resmeg, 2), ...                 % create wavelet filter bank to extract amplitude envelopes
+    % resbrain = downsample(brain.', orgfs/fs).';                           % downsample neural data from original sampling freq, here directly loading resampled data  
+
+    gfp = zeros(nfreqs, size(resbrain, 2));                                 % struct for global field power, size frequencies x nsignals
+    fb = cwtfilterbank('SignalLength', size(resbrain, 2), ...               % create wavelet filter bank to extract amplitude envelopes
         'SamplingFrequency', fs, 'FrequencyLimits',[0.5 40], ...            % the parameters FrequencyLimits and WaveletParams used here
         'WaveletParameters',[3,20]);                                        % determine the frequency resolution (here: 64 freqs between 0.5 - 40Hz)
-    
+
     % calculate global field power for each channel/sensor/parcel/voxel
-    for ichan = 1:size(resmeg, 1)
-        [Envc,f] = wt(fb, resmeg(ichan,:));                                 % apply wavelet transform
+    for ichan = 1:size(resbrain, 1)
+        [Envc,f] = wt(fb, resbrain(ichan,:));                               % apply wavelet transform
         y = abs(Envc);
-        gfp = gfp + abs(y);                                                 % calculate global field power as sum of amplitude envelopes 
+        gfp = gfp + abs(y);                                                 % calculate global field power as sum of amplitude envelopes
     end
-    
+
     %% Calculate empirical and surrogate Modulation Index
-    % remove NaNs first: all phase extraction methods introduce NaNs 
+    % remove NaNs first: all phase extraction methods introduce NaNs
     % in beginning & end of phase-vector, we find the common valid
-    % timepoints across surrogate and empirical phase time series 
+    % timepoints across surrogate and empirical phase time series
     nancols = any(isnan(allsresp), 1);
     first_surr = find(~nancols, 1, 'first');                                % find last column with NaNs at beginning across surrogates
     last_surr  = find(~nancols, 1, 'last');                                 % find first column with NaNs at end across surrogates
 
-    first = max(first, first_surr);                                         % match against empirical NaN indices                                         
+    first = max(first, first_surr);                                         % match against empirical NaN indices
     last  = min(last, last_surr);
 
     pv = pv(first:last);                                                    % NAs need to be removed for binning in mi code
@@ -153,7 +156,7 @@ for isub = 1:length(ids)
     bs = std(MI2,0,1);
     mi = (MI'-bm)./bs;                                                      % normalise empirical MI values with surrogate distribution
 
-    %%% save everything 
+    %%% save everything
     mis(isub, :) = mi;
     surrmis(isub, :, :) = MI2';
 
@@ -161,4 +164,3 @@ end
 
 save([outpath 'misemp.mat'], "mis");                  % MIs for all subjects
 save([outpath 'surrmis.mat'], "surrmis", "-v7.3");    % surrogate MIs for all subjects
-
