@@ -157,7 +157,7 @@ clc
 close all
 
 addpath(genpath('~/respmethods/'));
-outpath = '~/respmethods/matlab/_exampledata/';
+outpath = '~/respmethods/_exampledata/';
 
 load(fullfile(outpath, 'binhr.mat'));         % subjects x phase bins matrix of mean empirical hit rates across phase bins
 load(fullfile(outpath, 'surrbinhr.mat'));     % subjects x phase bins x iterations matrix of surrogate hit rates across phase bins
