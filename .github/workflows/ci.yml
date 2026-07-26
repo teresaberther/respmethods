@@ -21,12 +21,15 @@ jobs:
         uses: astral-sh/setup-uv@d31148d669074a8d0a63714ba94f3201e7020bc3
         with:
           enable-cache: true
+          python-version: "3.13"
 
       - name: Set up Python
         run: uv python install
 
       - name: Install dependencies
-        run: uv sync --directory ./python
+        working-directory: ./python
+        run: uv sync --verbose
 
       - name: Run tests
-        run: uv run --directory ./python pytest
+        working-directory: ./python
+        run: uv run pytest
