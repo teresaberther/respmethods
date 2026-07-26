@@ -33,78 +33,20 @@ No special installation required, just add the 'matlab' folder in this repositor
 
 ![results plot for simulated data, linear and polar representations](simcluster_results_matlab.png)
 
-# Python package - respymethods
-### Disclaimer
-This package is still under active development and only available in a beta version, thus also does not yet have a Python Package Index. The code is not documented fully yet and partly experimental, download at your own risk.
+# Python package 🐍 `respymethods`
 
-### Install
-#### 1. Requirements
-The build of the package requires a C compiler, which may not necessarily be natively included in your OS. We recommend:
-- Linux: `gcc`, install as recommended in the [gcc documentation](https://gcc.gnu.org/install/)
-- MacOS: `clang`,  shipped with the [XCode Developer Tools](https://developer.apple.com/documentation/safari-developer-tools/installing-xcode-and-simulators)
-- Windows:  `Visual C++`, download [here](https://visualstudio.microsoft.com/)
-
-
-Additionally, the installation depends on the package manager uv - a fast and efficient python package and project manager. Please refer to the [documentation](https://docs.astral.sh/uv/) for more details.
-On **Unix** systems (Linux + MacOS), the installer can be downloaded with `curl` and executed with `sh`:
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
+### Installation
+You can install `respymethods` from the Python Package Index ([PyPi](https://pypi.org/project/respymethods/)):
+```
+pip install respymethods
 ```
 
-On **Windows**, use `irm` to download the executable script for `uv` and execute it with `iex` in a `PowerShell` prompt:
-
-```bash
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-#### 2. Package installation
-Respymethods will receive a Python Package Index in the future for easy installation using `pip`. The beta-dev version can be installed by manually compiling the included C modules and then installing the package. In line with best practices on python project management, we **highly** recommend creating your local installation of respymethods in a `uv` virtual environment.
-
-Package installation works the same both on Unix and Windows platforms once `uv` has been installed.
-From the parent repository folder (or the location where you usually stash your venvs), create a `uv` virtual environment in the `Terminal` (Unix) /`PowerShell` (Windows):
-
-```bash
-uv venv respyvenv
-```
-
-on **Unix**, activate it with:
-```bash
-source respyvenv/bin/activate
-```
-and on **Windows** with:
-```powershell
-respyvenv\Scripts\activate
-```
-
-Then, install the required packages in the virtual environment:
-
-```bash
-uv pip install setuptools numpy scipy matplotlib pyfftw
-```
-
-Manually compile the C modules by navigating into python/src/respymethods and running:
-
-```bash
-cd $PATH/respmethods/python/src/respymethods/
-python setup.py build_ext --inplace
-```
-
-Upon successful compilation, `src/respymethods` then contains a `build` folder and `.so` files for the C modules.
-Navigate back to the package root folder at `respmethods/python` and install using:
-
-```bash
-cd ../..
-uv pip install -e .
-```
-
-
-### Functions
-Detailed documentation of all included functions to be added soon.
-
-### Scripts
-- ``Tutorial_DataPrepMultiprocessing.py`` demo pipeline for parallelized, fast respiratory phase extraction and surrogate generation using IAAFT
-- ``Tutorial_DataClust.py`` demo script for circular permutation test on example empirical and simulated data, generates linear and polar plots of the results
+### Tutorials & Plots 
+- [Tutorial_Preprocessing](https://github.com/teresaberther/respmethods/blob/main/python/Tutorial_Preprocessing.ipynb): A jupyter notebook following all the steps for extracting respiration phase angle and bin behavioral responses on a single participant.
+- [Tutorial_RunSimulation](https://github.com/teresaberther/respmethods/blob/main/python/Tutorial_RunSimulation.ipynb): A jupyter notebook explaining how to simulate behavioral responses as a function of respiration phase angle.
+- [Tutorial_PlotSimulation](https://github.com/teresaberther/respmethods/blob/main/python/Tutorial_PlotSimulation.ipynb): A jupyter notebook showing how to reproduce the plots from our simulation from the paper.
+- [Tutorial_DataPrepMultiprocessing](https://github.com/teresaberther/respmethods/blob/main/python/advanced_tutorials/Tutorial_DataPrepMultiprocessing.py): demo pipeline for parallelized, fast respiratory phase extraction and surrogate generation using IAAFT.
+- [Tutorial_HPCSimulation](https://github.com/teresaberther/respmethods/tree/main/python/advanced_tutorials/Tutorial_HPCSimulation). Collection of code used to run the simulation. Requires access to and experience in High Performance Computing (HPC).
 
 
 ## Authors:
