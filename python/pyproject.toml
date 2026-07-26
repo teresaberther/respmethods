@@ -19,7 +19,7 @@ dependencies = [
 	"seaborn",
 	"cmcrameri",
 	"setuptools",
-	"hyperqueue",
+#	"hyperqueue", # needed for running simulations on the cluster 
 ]
 authors = [
 	{name = "Elio Balestrieri", email = "ebalestr@uni-muenster.de"},
