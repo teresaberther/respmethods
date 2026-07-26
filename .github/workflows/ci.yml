@@ -3,7 +3,7 @@ name: test-CI
 
 on:
   push:
-    branches: [dev-ship]
+    branches: [main, dev-ship]
   pull_request:
     branches: [main]
 jobs:
