@@ -1,0 +1,35 @@
+# test ci
+name: test-CI
+
+on:
+  push:
+    branches: [main, dev-ship]
+  pull_request:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+        fail-fast: false
+        matrix:
+            os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@d31148d669074a8d0a63714ba94f3201e7020bc3
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        working-directory: ./python
+        run: uv sync --verbose
+
+      - name: Run tests
+        working-directory: ./python
+        run: uv run pytest

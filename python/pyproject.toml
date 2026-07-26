@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "respymethods"
-version = "0.1.0"
+version = "0.9.0"
 description = "Robust pipeline for respiration phase-locked analyses of neural or behavioral data including a cluster permutation test for circular data. "
 requires-python = ">= 3.13"
 dependencies = [
@@ -14,14 +14,14 @@ dependencies = [
 	"matplotlib",
 	"numba",
 	"pandas",
-    "hyperqueue==0.24.0",
+	"pytest>=9.1.0",
+	"jupyterlab",
+	"seaborn",
+	"cmcrameri",
+	"setuptools",
+#	"hyperqueue", # needed for running simulations on the cluster 
 ]
 authors = [
 	{name = "Elio Balestrieri", email = "ebalestr@uni-muenster.de"},
 	{name = "Teresa Berther", email = "teresa.berther@uni-muenster.de"},
-]
-
-[tool.setuptools]
-ext-modules = [
-	{name = "respymethods.PhaseExtraction", sources = ['src/respymethods/clib/phase-extraction.c'], include-dirs = ["src/respymethods/clib/"], py-limited-api = true}
 ]

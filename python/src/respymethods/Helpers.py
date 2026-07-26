@@ -5,6 +5,9 @@ Set of Helpers functins
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from cmcrameri import cm 
 
 def plv(theta1, theta2):
     """
@@ -54,4 +57,46 @@ def prune_nan(sig1, sig2):
     out_sig2 = sig2[common_onset:common_offset]
     
     return out_sig1, out_sig2
+
+
+def plot_clusters(summary, x_axis, y_axis):
+
+    if len(summary["idxs"])==0:
+        print("no cluster found")
+        return
+
     
+    # 1. Plot the empirical results
+    plt.plot(x_axis, y_axis, label="empirical results", color='black', linewidth=2, zorder=1)
+
+    # 2. Plot the cluster tick lines
+    cmap = cm.batlow
+
+    # 3. Create an array of positions from 0.0 to 1.0
+    positions = np.linspace(0, 1, len(summary["idxs"]))
+
+    # 4. Pass the positions into the colormap to get your array of RGBA colors
+    colors = cmap(positions)
+    
+    # Calculate a small offset so the ticks don't sit exactly on the line
+    # This ensures they are "clearly separated"
+    offset = np.abs(np.min(y_axis)) * 0.1 
+
+    for i, idxs in enumerate(summary["idxs"]):
+                
+        # Determine the Y value for the tick (average Y of the cluster + offset)
+        clust_vals = np.zeros(x_axis.shape)*np.nan
+        clust_vals[idxs] = np.min(y_axis) - offset
+        
+        # Plot the horizontal line
+        p_val = summary["p"][i]
+        plt.plot(x_axis, clust_vals, 
+                   color=colors[i], linewidth=3, 
+                   label=f"Cluster {i+1} (p={p_val:.4f})", zorder=2)
+
+    plt.xlabel("theta")
+    plt.ylabel("data")
+    plt.title("Empirical Results with Significant Clusters")
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left') # Move legend outside
+    plt.tight_layout()
+    plt.show()
