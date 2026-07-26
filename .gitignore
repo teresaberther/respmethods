@@ -16,9 +16,13 @@
 *.out
 *.log
 *.tar
+*.csv
 
 # uv
 *.lock
 
 # notebook byproducts
 .ipynb_checkpoints
+
+# pycache
+__pycache__
