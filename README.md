@@ -10,6 +10,10 @@ Please cite this paper when the provided code is used.
 - [MATLAB toolbox](#matlab-toolbox---respLABmethods)
 - [Python package](#python-package---respymethods)
 
+## Data:
+- [``_exampledata``](https://github.com/teresaberther/respmethods/tree/main/_exampledata) contains one example dataset for all tutorial scripts provided in this toolbox, in .mat format
+- for the full simulation dataset described in the accompanying tutorial paper see the accompanying [OSF project](https://osf.io/yzewv/overview) 
+
 # MATLAB toolbox - respLABmethods
 ### Install
 No special installation required, just add the 'matlab' folder in this repository and all its subfolders to your path.
@@ -20,14 +24,18 @@ No special installation required, just add the 'matlab' folder in this repositor
 - ``two_point_interp``extract phase of an oscillatory time series using the two-point interpolation method
 - ``four_point_interp``extract phase of an oscillatory time series using the four-point interpolation method
 - ``protohase_interp`` extract phase of an oscillatory time series using the protophase interpolation method, adapted from the [DAMOCO toolbox](http://www.stat.physik.uni-potsdam.de/~mros/damoco.html) (C) Björn Kralemann, Michael Rosenblum, Arkady Pikovsky, University of Potsdam
+- ``trapez_interp`` extract phase of an oscillatory time series using the trapezoid interpolation method
 
 #### Required, included functions
 - ``generate_surrogate_iaaft``generates a phase-independent surrogate of a time series using the Iterative Amplitude-Adjusted Fourier Transform, (C) Alessio Perinelli & Leonardo Ricci, NSE Laboratory, Department of Physics, University of Trento ([github](https://github.com/LeonardoRicci/iaaft))
 - ``PLV``computes the phase-locking value between two signals, (C) Edden Gerber, Edmond and Lily Safra Center for Brain Sciences, Hebrew University of Jerusalem, Israel ([github](https://github.com/edden-gerber/time_series_analysis_and_statistics))
 
-### Scripts
-- ``Tutorial_DataPrep.m`` demo pipeline for respiratory phase extraction, surrogate generation using IAAFT, and binning of behavioral data into respiratory phase bins
-- ``Tutorial_DataClust.m`` demo script for circular permutation test on example empirical and simulated data, generates linear and polar plots of the results
+### Tutorials & Plots
+- [`Tutorial_DataPrep`](https://github.com/teresaberther/respmethods/blob/main/matlab/Tutorial_DataPrep.m) demo pipeline for respiratory phase extraction, surrogate generation using IAAFT, and binning of behavioral data into respiratory phase bins
+- [`Tutorial_DataClust`](https://github.com/teresaberther/respmethods/blob/main/matlab/Tutorial_DataClust.m) demo script for circular permutation test on example empirical and simulated data, generates linear and polar plots of the results
+- [ `Tutorial_MI`](https://github.com/teresaberther/respmethods/blob/main/matlab/Tutorial_MI.m) demo script for calculating respiratory-brain phase-amplitude coupling using the Modulation Index as proposed by Tort (2010)
+
+- `matlab` > [`_figures`](https://github.com/teresaberther/respmethods/tree/main/matlab/_figures) contains the data and scripts used to generate figures 1-3 in the accompanying tutorial paper, for simulation figure code see python package below 
 
 ### Example plots for results of circular cluster permutation test on randomly simulated data:
 
@@ -42,11 +50,11 @@ pip install respymethods
 ```
 
 ### Tutorials & Plots 
-- [Tutorial_Preprocessing](https://github.com/teresaberther/respmethods/blob/main/python/Tutorial_Preprocessing.ipynb): A jupyter notebook following all the steps for extracting respiration phase angle and bin behavioral responses on a single participant.
-- [Tutorial_RunSimulation](https://github.com/teresaberther/respmethods/blob/main/python/Tutorial_RunSimulation.ipynb): A jupyter notebook explaining how to simulate behavioral responses as a function of respiration phase angle.
-- [Tutorial_PlotSimulation](https://github.com/teresaberther/respmethods/blob/main/python/Tutorial_PlotSimulation.ipynb): A jupyter notebook showing how to reproduce the plots from our simulation from the paper.
-- [Tutorial_DataPrepMultiprocessing](https://github.com/teresaberther/respmethods/blob/main/python/advanced_tutorials/Tutorial_DataPrepMultiprocessing.py): demo pipeline for parallelized, fast respiratory phase extraction and surrogate generation using IAAFT.
-- [Tutorial_HPCSimulation](https://github.com/teresaberther/respmethods/tree/main/python/advanced_tutorials/Tutorial_HPCSimulation). Collection of code used to run the simulation. Requires access to and experience in High Performance Computing (HPC).
+- [`Tutorial_Preprocessing`](https://github.com/teresaberther/respmethods/blob/main/python/Tutorial_Preprocessing.ipynb): A jupyter notebook following all the steps for extracting respiration phase angle and bin behavioral responses on a single participant.
+- [`Tutorial_RunSimulation`](https://github.com/teresaberther/respmethods/blob/main/python/Tutorial_RunSimulation.ipynb): A jupyter notebook explaining how to simulate behavioral responses as a function of respiration phase angle.
+- [ `Tutorial_PlotSimulation`](https://github.com/teresaberther/respmethods/blob/main/python/Tutorial_PlotSimulation.ipynb): A jupyter notebook showing how to reproduce the plots from our simulation from the paper.
+- [ `Tutorial_DataPrepMultiprocessing`](https://github.com/teresaberther/respmethods/blob/main/python/advanced_tutorials/Tutorial_DataPrepMultiprocessing.py): demo pipeline for parallelized, fast respiratory phase extraction and surrogate generation using IAAFT.
+- [ `Tutorial_HPCSimulation`](https://github.com/teresaberther/respmethods/tree/main/python/advanced_tutorials/Tutorial_HPCSimulation): Collection of code used to run the simulation. Requires access to and experience in High Performance Computing (HPC).
 
 
 ## Authors:
