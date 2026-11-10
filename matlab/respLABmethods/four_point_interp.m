@@ -37,25 +37,25 @@ end
 phasevec = NaN(size(zresp));            % initiate phase vector with NaNs
 phasevec(peaks) = 0;                    % resp maximum = phase zero
 phasevec(troughs) = pi;                 % resp minimum = phase +/- pi
-phasevec(inflinsp) = -pi/2;             % inspiratory infliction point = phase -pi/2
-phasevec(inflexp) = pi/2;               % expiratory infliction point = phase pi/2
+phasevec(inflinsp) = -pi/2;             % inspiratory inflection point = phase -pi/2
+phasevec(inflexp) = pi/2;               % expiratory inflection point = phase pi/2
 
 for k = 1:numel(peaks)-1
-    t1 = phasevec(peaks(k)+1:inflexp(k));               % peak to expiratory infliction point
-    s1 = linspace(0+pi/numel(t1),pi/2,numel(t1));       % linear interpolation
-    phasevec(peaks(k)+1:inflexp(k)) = s1;               % substitute with phase angles (peak2inflexp)
+        t1 = phasevec(peaks(k)+1:inflexp(k));                   % peak to expiratory inflection point
+        s1 = linspace(0+(pi/2)/numel(t1),pi/2,numel(t1));       % linear interpolation   
+        phasevec(peaks(k)+1:inflexp(k)) = s1;                   % substitute with phase angles (peak2inflexp)
 
-    t2 = phasevec(inflexp(k):troughs(k));               % expiratory infliction point to trough
-    s2 = linspace(pi/2+pi/numel(t2),pi,numel(t2));
-    phasevec(inflexp(k):troughs(k)) = s2;
+        t2 = phasevec(inflexp(k)+1:troughs(k));                 % expiratory inflection point to trough
+        s2 = linspace(pi/2+(pi/2)/numel(t2),pi,numel(t2));      
+        phasevec(inflexp(k)+1:troughs(k)) = s2;                 
 
-    t3 = phasevec(troughs(k):inflinsp(k));              % trough to inspiratory infliction point
-    s3 = linspace(-pi+pi/numel(t3),-pi/2,numel(t3));
-    phasevec(troughs(k):inflinsp(k)) = s3;
+        t3 = phasevec(troughs(k)+1:inflinsp(k));                % trough to inspiratory infliction point
+        s3 = linspace(-pi+(pi/2)/numel(t3),-pi/2,numel(t3));    
+        phasevec(troughs(k)+1:inflinsp(k)) = s3;                
 
-    t4 = phasevec(inflinsp(k):peaks(k+1));              % inspiratory infliction point to peak
-    s4 = linspace(-pi/2+pi/numel(t4),0,numel(t4));
-    phasevec(inflinsp(k):peaks(k+1)) = s4;
+        t4 = phasevec(inflinsp(k)+1:peaks(k+1));                % inspiratory infliction point to peak
+        s4 = linspace(-pi/2+(pi/2)/numel(t4),0,numel(t4));     
+        phasevec(inflinsp(k)+1:peaks(k+1)) = s4;              
 end
 
 first = find(~isnan(phasevec), 1, 'first');   % get index of first phase value so we can exclude NAs later
