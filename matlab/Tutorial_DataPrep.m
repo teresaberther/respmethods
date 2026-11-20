@@ -4,8 +4,12 @@
 % two-point interpolation, generates surrogate phases via the Iterative
 % Amplitude-Adjusted Fourier Transform (IAAFT), and bins behavioral data
 % (e.g., hit rates) into empirical and surrogate respiratory phase bins.
-% A detailed description of the preparation pipeline can be found in
-% [ref].
+% A detailed description of the preparation pipeline can be found in:
+%
+% Berther, T., Balestrieri, E., Saltafossi, M., Paulsen, L. B., Andersen,
+% L. M., & Kluger, D. S. (2026).
+% Robust circular cluster-based statistics for respiration-brain coupling.
+% PLOS Computational Biology, 22(9), e1014672.
 %
 % Input:
 %   - raw respiration time series vector
@@ -66,7 +70,7 @@ for isub = 1:numel(ids)
 
     % extract phase vector of empirical data using two-point interpolation
     fig = figure; plot(x);                                                  % quick rudimentary visual check to determine best criterions for peak detection
-    waitfor(fig);                                                         
+    waitfor(fig);
     [pv, first, last] = two_point_interp(x, 'MinPeakProm', 1);              % using a criterion of z = 1 for minimum peak prominence here, first/last indices saved for NaN exclusion later
 
     %%% generate surrogate phase vectors using IAAFT

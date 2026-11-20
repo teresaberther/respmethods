@@ -3,10 +3,11 @@
 % This script demonstrates how to calculate phase-amplitude coupling
 % between respiration and global field power in neural resting state
 % data using the Modulation Index introduced by Tort (2010)
-% as described in 
-% Berther, T., Balestrieri, E., Saltafossi, M., Paulsen, L. B., Andersen, 
-% L. M., & Kluger, D. S. (2026). 
-% Robust circular cluster-based statistics for respiration-brain coupling. 
+% as described in:
+%
+% Berther, T., Balestrieri, E., Saltafossi, M., Paulsen, L. B., Andersen,
+% L. M., & Kluger, D. S. (2026).
+% Robust circular cluster-based statistics for respiration-brain coupling.
 % PLOS Computational Biology, 22(9), e1014672.
 %
 % Input:
@@ -69,7 +70,7 @@ for isub = 1:length(ids)
 
     % extract phase vector of empirical data using two-point interpolation
     fig = figure; plot(x);                                                  % quick rudimentary visual check to determine best criterions for peak detection
-    waitfor(fig); 
+    waitfor(fig);
     [pv, first, last] = two_point_interp(x, 'MinPeakProm', 1);              % using a criterion of z = 1 for minimum peak prominence here, first/last indices saved for NaN exclusion later
 
     %%% generate surrogate phase vectors using IAAFT
@@ -98,7 +99,7 @@ for isub = 1:length(ids)
     neurofiles = dir(fullfile(datapath, pattern));
     load([datapath neurofiles.name]);
 
-    % resbrain = downsample(brain.', orgfs/fs).';                           % downsample neural data from original sampling freq, here directly loading resampled data  
+    % resbrain = downsample(brain.', orgfs/fs).';                           % downsample neural data from original sampling freq, here directly loading resampled data
 
     gfp = zeros(nfreqs, size(resbrain, 2));                                 % struct for global field power, size frequencies x nsignals
     fb = cwtfilterbank('SignalLength', size(resbrain, 2), ...               % create wavelet filter bank to extract amplitude envelopes
