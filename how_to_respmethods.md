@@ -10,7 +10,11 @@ This exemplary pipeline uses hit rate in a visual near-threshold task fluctuatin
 ### Step 1: Extract respiratory phase 
 Starting with the ```Tutorial_DataPrep```script, we load, downsample, smooth and z-score the respiratory time series. The original sampling frequency as well as the sampling frequency after downsampling are set as parameters in the ```config```section in the script head. Then, we extract continuous respiratory phase using the two-point-interpolation function ```two_point_interp``` in the ```Tutorial_DataPrep``` script. Phase extraction is performed using a peak detection algorithm with a minimum peak prominence parameter, and an optional minimum peak distance parameter. Set the minimum peak prominence parameter based on a quick visual check of the z-scored time series, and add the minimum distance parameter in particularly noisy data to avoid artefact peaks. Additional to the 'MinPeakProm' parameter for the minimum peak prominence, the function requires no other input besides the z-scored respiratory time series and can be flexibly interchanged with any of the other provided phase extraction methods using the same syntax. 
 
-**Exemplary function call** (equivalent for both MATLAB and python): ```respphase = two_point_interp_(zresp, 'MinpPeakProm', 1)``` with ```zresp```being the z-scored, smoothed original respiration trace vector and the resulting ```respphase```vector being the extracted phase
+**Exemplary function call** (equivalent for both MATLAB and python): 
+```
+respphase = two_point_interp_(zresp, 'MinpPeakProm', 1)
+``` 
+with ```zresp```being the z-scored, smoothed original respiration trace vector and the resulting ```respphase```vector being the extracted phase
 
 **Sanity check:** Plot the z-scored time series overlaid with the phase time series resulting from the phase extraction function.
 
