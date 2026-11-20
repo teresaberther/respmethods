@@ -1,16 +1,19 @@
-function [phasevec, first, last] = trapez_interp(ts, fs)
+function [phasevec, first, last] = trapez_interp(ts, fs, varargin)
 
 % Trapez_interp extracts the phase of a oscillatory time series 
 % (e.g. respiration) using the trapezium-area interpolation method.
 % 
 %
 % Use as:
-%   [phasevec, first, last] = trapez_interp(ts, fs)
+%   [phasevec, first, last] = trapez_interp(ts, fs, minpeakprom)
+%   [phasevec, first, last] = trapez_interp(ts, fs, minpeakprom, minpeakdist)
 %
 % 
 % Input arguments: 
-%    ts = vector of zscored, possibly smoothed oscillatory time series (e.g. respiration trace) 
-%    fs = sampling frequency of the time series
+%    ts            = vector of zscored, possibly smoothed oscillatory time series (e.g. respiration trace) 
+%    fs            = sampling frequency of the time series
+%    'MinPeakProm' = criterion used for minimum peak prominence when detecting peaks 
+%    'MinPeakDist' = optional criterion in noisy data for minimum distance between peaks
 % 
 % Output:  
 %   phasevector = vector of phase value time series corresponding to the input timeseries
@@ -20,9 +23,19 @@ function [phasevec, first, last] = trapez_interp(ts, fs)
 % Copyright (C) 2025, Teresa Berther, University of Münster, Germany 
 % code adapted from workshop tutorial by Tahnée Engelen & Daniel Kluger
 
+% parse input
+opts = struct(varargin{:});
+if ~isfield(opts, 'MinPeakProm')
+    error('MinPeakProminence is required.');
+end
+if ~isfield(opts, 'MinPeakDist') || isempty(opts.MinPeakDist)
+    opts.MinPeakDist = 0;
+end
+
+% interpolation
 firstder = diff(ts);                                                        % get first derivative of time series
 smfirstder = movmean(firstder, round(0.4 * fs));                            % smooth it 
-[~, exp_begin_sample] = findpeaks(ts, 'MinPeakProminence',1);               % use a criterion of z = 1 for peak prominence
+[~, exp_begin_sample] = findpeaks(ts, 'MinPeakProminence', opts.MinPeakProm, 'MinPeakDistance', opts.MinPeakDist); 
 
 insp_begin_sample = [];
 insp_begin_sample(1) = NaN;

@@ -1,4 +1,4 @@
-function [phasevec, first, last] = protophase_interp(ts)
+function [phasevec, first, last] = protophase_interp(ts, varargin)
 
 % Protophase_interp extracts the phase of a oscillatory time series 
 % (e.g. respiration) using the protophase interpolation method described by 
@@ -10,7 +10,9 @@ function [phasevec, first, last] = protophase_interp(ts)
 %
 % 
 % Input arguments: 
-%    ts = vector of zscored, possibly smoothed oscillatory time series (e.g. respiration trace) 
+%    ts            = vector of zscored, possibly smoothed oscillatory time series (e.g. respiration trace) 
+%    'MinPeakProm' = criterion used for minimum peak prominence when detecting peaks 
+%    'MinPeakDist' = optional criterion in noisy data for minimum distance between peaks
 % 
 % Output:  
 %   phasevector = vector of phase value time series corresponding to the input timeseries
@@ -32,10 +34,21 @@ function [phasevec, first, last] = protophase_interp(ts)
 
 % Adapted by Daniel Kluger & Teresa Berther, University of Münster, Germany (2025)
 
+% parse input
+opts = struct(varargin{:});
+if ~isfield(opts, 'MinPeakProm')
+    error('MinPeakProminence is required.');
+end
+if ~isfield(opts, 'MinPeakDist') || isempty(opts.MinPeakDist)
+    opts.MinPeakDist = 0;
+end
+
 %%% use findpeaks to get peak/trough indices
 ts = -ts;                                                                   % flip zscored resp trace
-[~, IN1] = findpeaks(ts, 'MinPeakProminence',1);                            % use a criterion of z = 1 for peak prominence
-[~, IN3] = findpeaks(-ts, 'MinPeakProminence',1);                           % use a criterion of z = 1 for peak prominence
+[~, IN1] = findpeaks(ts, 'MinPeakProminence', opts.MinPeakProm, ...
+            'MinPeakDistance', opts.MinPeakDist);
+[~, IN3] = findpeaks(ts, 'MinPeakProminence', opts.MinPeakProm, ...
+            'MinPeakDistance', opts.MinPeakDist);
 IN2 = find(ts(1:end-1)>0 & ts(2:end)<0);                                    % indices of the zero crossings: positive to negative
 IN4 = find(ts(1:end-1)<0 & ts(2:end)>0);                                    % indices of the zero crossings: negative to positive
 

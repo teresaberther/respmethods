@@ -3,7 +3,11 @@
 % This script demonstrates how to calculate phase-amplitude coupling
 % between respiration and global field power in neural resting state
 % data using the Modulation Index introduced by Tort (2010)
-% as described in [ref].
+% as described in 
+% Berther, T., Balestrieri, E., Saltafossi, M., Paulsen, L. B., Andersen, 
+% L. M., & Kluger, D. S. (2026). 
+% Robust circular cluster-based statistics for respiration-brain coupling. 
+% PLOS Computational Biology, 22(9), e1014672.
 %
 % Input:
 %   - z-scored respiration time series vector
@@ -64,7 +68,9 @@ for isub = 1:length(ids)
     x = movmean(x, 0.4*fs);                                                 % some smoothing
 
     % extract phase vector of empirical data using two-point interpolation
-    [pv, first, last] = two_point_interp(x);                                % first/last indices saved for NaN exclusion later
+    fig = figure; plot(x);                                                  % quick rudimentary visual check to determine best criterions for peak detection
+    waitfor(fig); 
+    [pv, first, last] = two_point_interp(x, 'MinPeakProm', 1);              % using a criterion of z = 1 for minimum peak prominence here, first/last indices saved for NaN exclusion later
 
     %%% generate surrogate phase vectors using IAAFT
     allsresp = nan(niter,length(x));
@@ -74,7 +80,7 @@ for isub = 1:length(ids)
         disp(['Computing surrogate resp trace #' num2str(k) '/' num2str(niter)]);
 
         sresp = generate_surrogate_iaaft(x,'verbose',false);                % single mock solution for respiration time series
-        [spv, ftmp, ltmp] = two_point_interp(sresp);                        % extract surrogate phase via two-point interpolation
+        [spv, ftmp, ltmp] = two_point_interp(sresp, 'MinPeakProm', 1);      % extract surrogate phase via two-point interpolation
         spvtmp = spv(max(first, ftmp):min(last, ltmp));                     % temporarily get rid of NaNs in phase vectors as PLV function cannot handle NaNs
         pvtmp = pv(max(first, ftmp):min(last, ltmp));
         plv = PLV(pvtmp', spvtmp);                                          % compute phase-locking value

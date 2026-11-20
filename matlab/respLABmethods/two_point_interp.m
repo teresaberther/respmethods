@@ -1,15 +1,18 @@
-function [phasevec, first, last] = two_point_interp(ts)
+function [phasevec, first, last] = two_point_interp(ts, varargin)
 
 % Two_point_interp extracts the phase of a oscillatory time series 
-% (e.g. respiration) using the two-point interpolation method.
+% (e.g. respiration) using the four-point interpolation method.
 % 
 %
 % Use as:
-%   [phasevec, first, last] = two_point_interp(ts)
+%   [phasevec, first, last] = four_point_interp(ts, minpeakprom)
+%   [phasevec, first, last] = four_point_interp(ts, minpeakprom, minpeakdist)
 %
 % 
 % Input arguments: 
-%    ts = vector of zscored, possibly smoothed oscillatory time series (e.g. respiration trace) 
+%    ts            = vector of zscored, possibly smoothed oscillatory time series (e.g. respiration trace) 
+%    'MinPeakProm' = criterion used for minimum peak prominence when detecting peaks 
+%    'MinPeakDist' = optional criterion in noisy data for minimum distance between
 % 
 % Output:  
 %   phasevector = vector of phase value time series corresponding to the input timeseries
@@ -18,7 +21,17 @@ function [phasevec, first, last] = two_point_interp(ts)
 %
 % Copyright (C) 2025, Daniel Kluger & Teresa Berther, University of Münster, Germany 
 
-[~, peaks] = findpeaks(ts, 'MinPeakProminence',1); % use a criterion of z = 1 for peak prominence
+% parse input
+opts = struct(varargin{:});
+if ~isfield(opts, 'MinPeakProm')
+    error('MinPeakProminence is required.');
+end
+if ~isfield(opts, 'MinPeakDist') || isempty(opts.MinPeakDist)
+    opts.MinPeakDist = 0;
+end
+
+% interpolation
+[~, peaks] = findpeaks(ts, 'MinPeakProminence', opts.MinPeakProm, 'MinPeakDistance', opts.MinPeakDist); 
 troughs = [];
 for k = 2:numel(peaks)                  % start with peak #2
     tmp = ts(peaks(k-1):peaks(k));      % get respiration course between peaks #1 and #2
